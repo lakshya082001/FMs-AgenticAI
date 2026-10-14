@@ -45,7 +45,7 @@ def orchestrator(s):
     elif "human" not in s and (not s["verdict"]["ok"] or r["borderline"] or total_cost(s) > tools.COST_GATE):
         nxt, reason = "human", "needs review: " + ("check failed" if not s["verdict"]["ok"] else "borderline p" if r["borderline"] else "cost above gate")
     else:
-        nxt, reason = "end", "auto-approved"
+        nxt, reason = "end", "human decision recorded" if "human" in s else "auto-approved"
     return {"next": nxt, **log(s, "orchestrator", next=nxt, reason=reason)}
 
 
@@ -62,8 +62,10 @@ def risk_agent(s):
         p, thr = tools.predict(row), tools.threshold()
         ev = tools.evidence(row)
         out = llm.ask("You are a supply-chain risk analyst. Use ONLY the evidence given; do not add numbers. "
+                      "P is a model probability, not a fact: describe the supplier with the exact hedge word given (e.g. 'possibly disrupted'), never state certainty. "
                       'Reply JSON {"summary": "<2-3 sentences on whether the supplier is disrupted and why>"}',
-                      f"supplier {row['supplier']}, P(disrupted)={p:.2f}, alert threshold={thr:.2f}\n" + "\n".join(ev))
+                      f"supplier {row['supplier']}, P(disrupted)={p:.2f}, alert threshold={thr:.2f}, status={'ALERT (above threshold)' if p >= thr else 'NO ALERT (below threshold)'}, hedge word={'likely' if p >= 0.5 else 'possibly' if p >= thr else 'unlikely'}\n"
+                      + "\n".join(ev))
         r = RiskAssessment(supplier=row["supplier"], date=str(row["date"]), p_disrupt=round(p, 3), threshold=thr, at_risk=p >= thr,
                            borderline=abs(p - thr) <= tools.BAND, evidence=ev, summary=out["summary"])
     return {"risk": r.model_dump(), **log(s, "risk_agent", output=r.model_dump())}

@@ -1,0 +1,417 @@
+{
+ "final": {
+  "risk": {
+   "supplier": "S1",
+   "date": "2017-07-10",
+   "p_disrupt": 0.7,
+   "threshold": 0.25000000000000006,
+   "at_risk": true,
+   "borderline": false,
+   "evidence": [
+    "7d late rate 0.60 vs 90d baseline 0.61 (-0.01)",
+    "3d late rate 0.59 vs 30d 0.63 (-0.04)",
+    "in-transit orders past promised date: 46 (35% of in-transit; training median 29%)",
+    "days since last observed alert: 60"
+   ],
+   "summary": "The supplier S1 is likely disrupted due to a high probability of disruption and an alert status that exceeds the threshold. Additionally, the in-transit orders past the promised date are significantly above the training median, indicating potential delays.",
+   "error": null
+  },
+  "exposure": {
+   "supplier": "S1",
+   "n_skus": 16,
+   "skus": [
+    {
+     "sku_id": 365,
+     "name": "Perfect Fitness Perfect Rip Deck",
+     "days_cover": 11.2,
+     "lead_days": 24.0,
+     "shortfall_days": 12.8,
+     "value_at_risk": 48044.79
+    },
+    {
+     "sku_id": 1363,
+     "name": "Summer dresses",
+     "days_cover": 3.6,
+     "lead_days": 24.0,
+     "shortfall_days": 20.4,
+     "value_at_risk": 2468.98
+    },
+    {
+     "sku_id": 1355,
+     "name": "Lawn mower",
+     "days_cover": 17.1,
+     "lead_days": 24.0,
+     "shortfall_days": 6.9,
+     "value_at_risk": 1512.53
+    },
+    {
+     "sku_id": 1360,
+     "name": "Smart watch ",
+     "days_cover": 13.3,
+     "lead_days": 24.0,
+     "shortfall_days": 10.7,
+     "value_at_risk": 1048.8
+    },
+    {
+     "sku_id": 823,
+     "name": "Titleist Pro V1x High Numbers Personalized Go",
+     "days_cover": 5.1,
+     "lead_days": 24.0,
+     "shortfall_days": 18.9,
+     "value_at_risk": 765.29
+    },
+    {
+     "sku_id": 565,
+     "name": "adidas Youth Germany Black/Red Away Match Soc",
+     "days_cover": 13.8,
+     "lead_days": 24.0,
+     "shortfall_days": 10.2,
+     "value_at_risk": 574.0
+    },
+    {
+     "sku_id": 982,
+     "name": "insta-bed Neverflat Air Mattress",
+     "days_cover": 0.0,
+     "lead_days": 24.0,
+     "shortfall_days": 24.0,
+     "value_at_risk": 179.99
+    },
+    {
+     "sku_id": 226,
+     "name": "Bowflex SelectTech 1090 Dumbbells",
+     "days_cover": 0.0,
+     "lead_days": 24.0,
+     "shortfall_days": 24.0,
+     "value_at_risk": 144.0
+    },
+    {
+     "sku_id": 58,
+     "name": "Diamondback Boys' Insight 24 Performance Hybr",
+     "days_cover": 0.0,
+     "lead_days": 24.0,
+     "shortfall_days": 24.0,
+     "value_at_risk": 144.0
+    },
+    {
+     "sku_id": 666,
+     "name": "Merrell Men's All Out Flash Trail Running Sho",
+     "days_cover": 14.3,
+     "lead_days": 24.0,
+     "shortfall_days": 9.7,
+     "value_at_risk": 74.79
+    },
+    {
+     "sku_id": 1346,
+     "name": "Sports Books ",
+     "days_cover": 20.0,
+     "lead_days": 24.0,
+     "shortfall_days": 4.0,
+     "value_at_risk": 43.51
+    },
+    {
+     "sku_id": 893,
+     "name": "Team Golf Pittsburgh Steelers Putter Grip",
+     "days_cover": 21.8,
+     "lead_days": 24.0,
+     "shortfall_days": 2.2,
+     "value_at_risk": 42.98
+    },
+    {
+     "sku_id": 625,
+     "name": "Nike Men's Kobe IX Elite Low Basketball Shoe",
+     "days_cover": 20.0,
+     "lead_days": 24.0,
+     "shortfall_days": 4.0,
+     "value_at_risk": 40.0
+    },
+    {
+     "sku_id": 258,
+     "name": "Nike Women's Free 5.0 TR FIT PRT 4 Training S",
+     "days_cover": 22.2,
+     "lead_days": 24.0,
+     "shortfall_days": 1.8,
+     "value_at_risk": 30.4
+    }
+   ],
+   "summary": "The SKUs most exposed to stockouts are the Summer dresses and Titleist Pro V1x High Numbers Personalized Go, with shortfall days of 20.4 and 18.9 respectively, indicating they will run out of stock significantly before the next resupply. Additionally, the Perfect Fitness Perfect Rip Deck has a high value at risk of $48,044.79, making it critical to address its shortfall of 12.8 days."
+  },
+  "plan": {
+   "items": [
+    {
+     "sku_id": 365,
+     "option": "switch_S5",
+     "shortfall_days": 0.0,
+     "incremental_cost": -4942.87,
+     "lost_sales_value": 0.0,
+     "rationale": "This option minimizes both incremental cost and lost sales value."
+    },
+    {
+     "sku_id": 1363,
+     "option": "switch_S5",
+     "shortfall_days": 3.6,
+     "incremental_cost": -279.7,
+     "lost_sales_value": 436.13,
+     "rationale": "This option has the lowest incremental cost and a manageable lost sales value."
+    },
+    {
+     "sku_id": 1355,
+     "option": "switch_S2",
+     "shortfall_days": 0.0,
+     "incremental_cost": -380.26,
+     "lost_sales_value": 0.0,
+     "rationale": "This option eliminates lost sales and has a negative incremental cost."
+    },
+    {
+     "sku_id": 1360,
+     "option": "switch_S2",
+     "shortfall_days": 1.3,
+     "incremental_cost": -200.58,
+     "lost_sales_value": 128.48,
+     "rationale": "This option minimizes both incremental cost and lost sales value."
+    },
+    {
+     "sku_id": 823,
+     "option": "switch_S5",
+     "shortfall_days": 2.1,
+     "incremental_cost": -84.21,
+     "lost_sales_value": 83.2,
+     "rationale": "This option has the lowest incremental cost and a low lost sales value."
+    }
+   ]
+  },
+  "verdict": {
+   "ok": true,
+   "errors": []
+  },
+  "human": null
+ },
+ "trace": [
+  {
+   "node": "orchestrator",
+   "next": "risk",
+   "reason": "start"
+  },
+  {
+   "node": "risk_agent",
+   "output": {
+    "supplier": "S1",
+    "date": "2017-07-10",
+    "p_disrupt": 0.7,
+    "threshold": 0.25000000000000006,
+    "at_risk": true,
+    "borderline": false,
+    "evidence": [
+     "7d late rate 0.60 vs 90d baseline 0.61 (-0.01)",
+     "3d late rate 0.59 vs 30d 0.63 (-0.04)",
+     "in-transit orders past promised date: 46 (35% of in-transit; training median 29%)",
+     "days since last observed alert: 60"
+    ],
+    "summary": "The supplier S1 is likely disrupted due to a high probability of disruption and an alert status that exceeds the threshold. Additionally, the in-transit orders past the promised date are significantly above the training median, indicating potential delays.",
+    "error": null
+   }
+  },
+  {
+   "node": "orchestrator",
+   "next": "exposure",
+   "reason": "supplier at risk"
+  },
+  {
+   "node": "exposure_agent",
+   "output": {
+    "supplier": "S1",
+    "n_skus": 16,
+    "skus": [
+     {
+      "sku_id": 365,
+      "name": "Perfect Fitness Perfect Rip Deck",
+      "days_cover": 11.2,
+      "lead_days": 24.0,
+      "shortfall_days": 12.8,
+      "value_at_risk": 48044.79
+     },
+     {
+      "sku_id": 1363,
+      "name": "Summer dresses",
+      "days_cover": 3.6,
+      "lead_days": 24.0,
+      "shortfall_days": 20.4,
+      "value_at_risk": 2468.98
+     },
+     {
+      "sku_id": 1355,
+      "name": "Lawn mower",
+      "days_cover": 17.1,
+      "lead_days": 24.0,
+      "shortfall_days": 6.9,
+      "value_at_risk": 1512.53
+     },
+     {
+      "sku_id": 1360,
+      "name": "Smart watch ",
+      "days_cover": 13.3,
+      "lead_days": 24.0,
+      "shortfall_days": 10.7,
+      "value_at_risk": 1048.8
+     },
+     {
+      "sku_id": 823,
+      "name": "Titleist Pro V1x High Numbers Personalized Go",
+      "days_cover": 5.1,
+      "lead_days": 24.0,
+      "shortfall_days": 18.9,
+      "value_at_risk": 765.29
+     },
+     {
+      "sku_id": 565,
+      "name": "adidas Youth Germany Black/Red Away Match Soc",
+      "days_cover": 13.8,
+      "lead_days": 24.0,
+      "shortfall_days": 10.2,
+      "value_at_risk": 574.0
+     },
+     {
+      "sku_id": 982,
+      "name": "insta-bed Neverflat Air Mattress",
+      "days_cover": 0.0,
+      "lead_days": 24.0,
+      "shortfall_days": 24.0,
+      "value_at_risk": 179.99
+     },
+     {
+      "sku_id": 226,
+      "name": "Bowflex SelectTech 1090 Dumbbells",
+      "days_cover": 0.0,
+      "lead_days": 24.0,
+      "shortfall_days": 24.0,
+      "value_at_risk": 144.0
+     },
+     {
+      "sku_id": 58,
+      "name": "Diamondback Boys' Insight 24 Performance Hybr",
+      "days_cover": 0.0,
+      "lead_days": 24.0,
+      "shortfall_days": 24.0,
+      "value_at_risk": 144.0
+     },
+     {
+      "sku_id": 666,
+      "name": "Merrell Men's All Out Flash Trail Running Sho",
+      "days_cover": 14.3,
+      "lead_days": 24.0,
+      "shortfall_days": 9.7,
+      "value_at_risk": 74.79
+     },
+     {
+      "sku_id": 1346,
+      "name": "Sports Books ",
+      "days_cover": 20.0,
+      "lead_days": 24.0,
+      "shortfall_days": 4.0,
+      "value_at_risk": 43.51
+     },
+     {
+      "sku_id": 893,
+      "name": "Team Golf Pittsburgh Steelers Putter Grip",
+      "days_cover": 21.8,
+      "lead_days": 24.0,
+      "shortfall_days": 2.2,
+      "value_at_risk": 42.98
+     },
+     {
+      "sku_id": 625,
+      "name": "Nike Men's Kobe IX Elite Low Basketball Shoe",
+      "days_cover": 20.0,
+      "lead_days": 24.0,
+      "shortfall_days": 4.0,
+      "value_at_risk": 40.0
+     },
+     {
+      "sku_id": 258,
+      "name": "Nike Women's Free 5.0 TR FIT PRT 4 Training S",
+      "days_cover": 22.2,
+      "lead_days": 24.0,
+      "shortfall_days": 1.8,
+      "value_at_risk": 30.4
+     }
+    ],
+    "summary": "The SKUs most exposed to stockouts are the Summer dresses and Titleist Pro V1x High Numbers Personalized Go, with shortfall days of 20.4 and 18.9 respectively, indicating they will run out of stock significantly before the next resupply. Additionally, the Perfect Fitness Perfect Rip Deck has a high value at risk of $48,044.79, making it critical to address its shortfall of 12.8 days."
+   }
+  },
+  {
+   "node": "orchestrator",
+   "next": "planner",
+   "reason": "exposed SKUs found"
+  },
+  {
+   "node": "planner_agent",
+   "attempt": 1,
+   "output": {
+    "items": [
+     {
+      "sku_id": 365,
+      "option": "switch_S5",
+      "shortfall_days": 0.0,
+      "incremental_cost": -4942.87,
+      "lost_sales_value": 0.0,
+      "rationale": "This option minimizes both incremental cost and lost sales value."
+     },
+     {
+      "sku_id": 1363,
+      "option": "switch_S5",
+      "shortfall_days": 3.6,
+      "incremental_cost": -279.7,
+      "lost_sales_value": 436.13,
+      "rationale": "This option has the lowest incremental cost and a manageable lost sales value."
+     },
+     {
+      "sku_id": 1355,
+      "option": "switch_S2",
+      "shortfall_days": 0.0,
+      "incremental_cost": -380.26,
+      "lost_sales_value": 0.0,
+      "rationale": "This option eliminates lost sales and has a negative incremental cost."
+     },
+     {
+      "sku_id": 1360,
+      "option": "switch_S2",
+      "shortfall_days": 1.3,
+      "incremental_cost": -200.58,
+      "lost_sales_value": 128.48,
+      "rationale": "This option minimizes both incremental cost and lost sales value."
+     },
+     {
+      "sku_id": 823,
+      "option": "switch_S5",
+      "shortfall_days": 2.1,
+      "incremental_cost": -84.21,
+      "lost_sales_value": 83.2,
+      "rationale": "This option has the lowest incremental cost and a low lost sales value."
+     }
+    ]
+   }
+  },
+  {
+   "node": "orchestrator",
+   "next": "check",
+   "reason": "verify plan numbers"
+  },
+  {
+   "node": "check",
+   "output": {
+    "ok": true,
+    "errors": []
+   }
+  },
+  {
+   "node": "orchestrator",
+   "next": "end",
+   "reason": "auto-approved"
+  }
+ ],
+ "llm_usage": {
+  "calls": 3,
+  "in_tokens": 1717,
+  "out_tokens": 525
+ },
+ "seconds": 39.7
+}

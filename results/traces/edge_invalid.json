@@ -1,0 +1,51 @@
+{
+ "final": {
+  "risk": {
+   "supplier": "S1",
+   "date": "2017-07-10",
+   "p_disrupt": null,
+   "threshold": null,
+   "at_risk": false,
+   "borderline": false,
+   "evidence": [],
+   "summary": "",
+   "error": "missing r7; missing r90; missing dev7"
+  },
+  "exposure": null,
+  "plan": null,
+  "verdict": null,
+  "human": null
+ },
+ "trace": [
+  {
+   "node": "orchestrator",
+   "next": "risk",
+   "reason": "start"
+  },
+  {
+   "node": "risk_agent",
+   "output": {
+    "supplier": "S1",
+    "date": "2017-07-10",
+    "p_disrupt": null,
+    "threshold": null,
+    "at_risk": false,
+    "borderline": false,
+    "evidence": [],
+    "summary": "",
+    "error": "missing r7; missing r90; missing dev7"
+   }
+  },
+  {
+   "node": "orchestrator",
+   "next": "end",
+   "reason": "row failed validation"
+  }
+ ],
+ "llm_usage": {
+  "calls": 0,
+  "in_tokens": 0,
+  "out_tokens": 0
+ },
+ "seconds": 0.0
+}
