@@ -3,3 +3,6 @@ numpy==2.1.3
 tabpfn==9.2.0
 torch==2.14.1
 scikit-learn==1.9.1
+langgraph==1.2.15
+openai==3.31.0
+pydantic==2.14.1
