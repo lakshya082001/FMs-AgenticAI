@@ -3,3 +3,4 @@ data/raw/
 __pycache__/
 .DS_Store
 results/*.pkl
+data/sim_features.csv

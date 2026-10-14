@@ -6,13 +6,15 @@ RAW = "data/raw/dataco.csv"
 # order-time features only: no actual shipping days, delivery status, order status or ship date (leakage)
 FEATS = ["Type", "Days for shipment (scheduled)", "Shipping Mode", "Market", "Order Region",
          "Category Name", "Customer Segment", "Department Name", "Order Item Quantity",
-         "Order Item Product Price", "Order Item Discount Rate", "Sales"]
-KEEP = ["Order Id", "Order Item Id", "Product Card Id", "Product Name", "order_date", "Late_delivery_risk"]
+         "Order Item Product Price", "Order Item Discount Rate", "Sales",
+         "supplier", "sup_late_7d", "sup_late_30d", "sup_trend", "sup_n7", "is_peak"]  # last 6 from disrupt.py
+KEEP = ["Order Id", "Order Item Id", "Product Card Id", "Product Name", "order_date", "Late_delivery_risk", "late_orig", "in_episode"]
 
 d = pd.read_csv(RAW, encoding="latin-1")
 d.columns = d.columns.str.strip()
 d = d[d["Delivery Status"] != "Shipping canceled"]  # no delivery outcome, label is a artefact
-d["order_date"] = pd.to_datetime(d["order date (DateOrders)"])
+d = d.drop(columns="Late_delivery_risk").merge(pd.read_csv("data/sim_features.csv"), on="Order Item Id")  # simulated label + trailing features
+d["order_date"] =pd.to_datetime(d["order date (DateOrders)"])
 d = d[KEEP + FEATS]
 d["month"], d["dow"], d["hour"] = d.order_date.dt.month, d.order_date.dt.dayofweek, d.order_date.dt.hour
 
