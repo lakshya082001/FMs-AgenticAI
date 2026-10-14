@@ -1,5 +1,6 @@
 """DataCo has no temporal dynamics (lane-level autocorrelation ~0), so overlay simulated supplier disruption episodes.
-Latent episodes raise P(late) for a supplier's orders; the model only sees trailing outcomes of already-delivered orders.
+During a latent episode each of a supplier's orders is delayed by 2-5 extra days with prob = severity; late = actual > scheduled days.
+The model only sees what is observable at day start: outcomes of delivered orders and in-transit orders past their promised date.
 Output: supplier-day table, target = supplier is inside an episode on that day. Measures detection of simulated
 disruptions, not real-world accuracy."""
 import numpy as np
@@ -10,10 +11,11 @@ d = pd.read_csv("data/raw/dataco.csv", encoding="latin-1")
 d.columns = d.columns.str.strip()
 d = d[d["Delivery Status"] != "Shipping canceled"].reset_index(drop=True)
 t = pd.to_datetime(d["order date (DateOrders)"]).to_numpy()
-done = (pd.to_datetime(d["shipping date (DateOrders)"]) + pd.to_timedelta(d["Days for shipping (real)"], unit="D")).to_numpy()
+ship = pd.to_datetime(d["shipping date (DateOrders)"]).to_numpy()
+sched, real = d["Days for shipment (scheduled)"].to_numpy(), d["Days for shipping (real)"].to_numpy()
 sup = d["Product Card Id"].map(pd.read_csv("data/sku.csv").set_index("product_id").primary_supplier).to_numpy()
 
-# episodes: gap ~ Exp(75d), duration ~ U(7,21)d, severity = P(on-time order flips to late) ~ U(0.35,0.7)
+# episodes: gap ~ Exp(75d), duration ~ U(7,21)d, severity = P(order delayed) ~ U(0.35,0.7)
 start, end = pd.Timestamp("2015-01-01"), pd.Timestamp("2018-02-01")
 eps = []
 for s in sorted(set(sup)):
@@ -28,8 +30,11 @@ eps.to_csv("data/episodes.csv", index=False)
 sev = np.zeros(len(d))
 for e in eps.itertuples():
     sev[(sup == e.supplier) & (t >= e.start.to_datetime64()) & (t < e.end.to_datetime64())] = e.severity
-orig = d.Late_delivery_risk.to_numpy()
-late = np.where((orig == 0) & (rng.random(len(d)) < sev), 1, orig)
+orig = (real > sched).astype(int)  # matches Late_delivery_risk exactly in DataCo
+real2 = real + np.where(rng.random(len(d)) < sev, rng.integers(2, 6, len(d)), 0)
+late = (real2 > sched).astype(int)
+done = ship + real2.astype("timedelta64[D]")
+promised = ship + sched.astype("timedelta64[D]")
 
 # supplier-day features at day start, from deliveries completed strictly before it (no leakage)
 days = pd.date_range("2015-04-01", "2017-09-30")  # first 90d dropped: warm-up for the 90d window
@@ -46,6 +51,16 @@ for s in sorted(set(sup)):
         f[f"r{W}"] = np.where(n > 0, (cs[hi] - cs[hi - n]) / np.maximum(n, 1), np.nan)
         if W == 7:
             f["n7"] = n
+    # in-transit orders past promised date at day start (observable before delivery completes)
+    en = np.searchsorted(D, done[ix], "left")
+    for col, st in [("n_overdue", np.searchsorted(D, promised[ix], "right")), ("n_transit", np.searchsorted(D, ship[ix], "left"))]:
+        v = en > st
+        diff = np.zeros(len(D) + 1)
+        np.add.at(diff, st[v], 1)
+        np.add.at(diff, en[v], -1)
+        f[col] = np.cumsum(diff)[:-1]
+    f["od_share"] = np.where(f.n_transit > 0, f.n_overdue / np.maximum(f.n_transit, 1), np.nan)
+    f = f.drop(columns="n_transit")
     f["dev3"], f["dev7"] = f.r3 - f.r30, f.r7 - f.r90
     pos = np.arange(len(f))
     last = pd.Series(np.where((f.dev7 > 0.10) & (f.n7 >= 20), pos, np.nan)).ffill()  # observed-only alert
