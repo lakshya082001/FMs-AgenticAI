@@ -3,8 +3,6 @@
 **Problem:** detect supplier disruptions early, then recommend replenishment actions.
 **Track A (multi-agent), Scenario S1 (supply chain risk).** TabPFN scores supplier-day disruption risk; LLM agents explain, find exposed SKUs and plan actions; a human approves risky plans.
 
-Walkthrough video: _TODO link_
-
 Data: DataCo (real) + simulated supplier disruptions, see [DATA.md](DATA.md). Results, traces, schema, assumptions, limitations: see [DETAILS.md](DETAILS.md).
 
 ## Pipeline
