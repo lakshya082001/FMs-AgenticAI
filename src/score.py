@@ -1,38 +1,38 @@
-import os, pickle, sys, time
+import os, pickle
 import numpy as np
 import pandas as pd
-from sklearn.metrics import roc_auc_score, brier_score_loss, log_loss
-from sklearn.preprocessing import OrdinalEncoder
+from sklearn.metrics import roc_auc_score, average_precision_score, brier_score_loss, f1_score
 from tabpfn import TabPFNClassifier
 
 for line in open("../.env"):
     if line.startswith("tabpfn_key"):
         os.environ["TABPFN_TOKEN"] = line.split("=", 1)[1].strip().strip("'\"")
 
-static = sys.argv[1:] == ["static"]  # ablation: drop supplier + trailing features
-tag = "_static" if static else ""
-CAT = ["Type", "Shipping Mode", "Market", "Order Region", "Category Name", "Customer Segment", "Department Name"] + ([] if static else ["supplier"])
-NUM = ["Days for shipment (scheduled)", "Order Item Quantity", "Order Item Product Price",
-       "Order Item Discount Rate", "Sales", "month", "dow", "hour"] + ([] if static else ["sup_late_7d", "sup_late_30d", "sup_trend", "sup_n7", "is_peak"])
-Y = "Late_delivery_risk"
+X = ["r3", "r7", "r14", "r30", "r90", "n7", "dev3", "dev7", "days_since_alert"]
+Y = "disrupted"
+tr, va, te = (pd.read_csv(f"data/{n}.csv", parse_dates=["date"]) for n in ["train", "val", "test"])
 
-tr, va, te = (pd.read_csv(f"data/{n}.csv") for n in ["train", "val", "test"])
-enc = OrdinalEncoder(handle_unknown="use_encoded_value", unknown_value=-1).fit(tr[CAT])
-X = lambda d: np.hstack([enc.transform(d[CAT]), d[NUM].to_numpy()])
+clf = TabPFNClassifier(device="cpu", random_state=42)
+clf.fit(tr[X], tr[Y])
+pickle.dump(clf, open("results/tabpfn.pkl", "wb"))
 
-clf = TabPFNClassifier(device="cpu", random_state=42, categorical_features_indices=list(range(len(CAT))))
-clf.fit(X(tr), tr[Y])
-if not static:
-    pickle.dump((enc, clf), open("results/tabpfn.pkl", "wb"))
+va["p"], te["p"] = (clf.predict_proba(d[X])[:, 1] for d in (va, te))
+thr = max(np.arange(0.1, 0.9, 0.05), key=lambda c: f1_score(va[Y], va.p >= c))  # threshold picked on val only
 
-out = []
 for name, d in [("val", va), ("test", te)]:
-    t = time.time()
-    p = clf.predict_proba(X(d))[:, 1]
-    # ECE: 10 equal-width bins
-    b = np.minimum((p * 10).astype(int), 9)
-    ece = sum(abs(d[Y][b == i].mean() - p[b == i].mean()) * (b == i).mean() for i in range(10) if (b == i).any())
-    print(f"{name}: auc={roc_auc_score(d[Y], p):.4f} brier={brier_score_loss(d[Y], p):.4f} "
-          f"logloss={log_loss(d[Y], p):.4f} ece={ece:.4f} base_rate={d[Y].mean():.3f} time={time.time()-t:.1f}s")
-    out.append(d[["Order Id", "Order Item Id", "Product Card Id", "order_date", "supplier", "in_episode", Y]].assign(split=name, p_late=p))
-pd.concat(out).to_csv(f"results/risk_scores{tag}.csv", index=False)
+    b = np.minimum((d.p * 10).astype(int), 9)
+    ece = sum(abs(d[Y][b == i].mean() - d.p[b == i].mean()) * (b == i).mean() for i in range(10) if (b == i).any())
+    print(f"{name}: auc={roc_auc_score(d[Y], d.p):.3f} ap={average_precision_score(d[Y], d.p):.3f} brier={brier_score_loss(d[Y], d.p):.3f} "
+          f"ece={ece:.3f} f1@{thr:.2f}={f1_score(d[Y], d.p >= thr):.3f} base={d[Y].mean():.3f} | baselines auc: r7={roc_auc_score(d[Y], d.r7):.3f} dev7={roc_auc_score(d[Y], d.dev7):.3f}")
+
+# detection delay on test episodes: days from episode start until first flag
+eps = pd.read_csv("data/episodes.csv", parse_dates=["start", "end"])
+eps = eps[(eps.start >= te.date.min()) & (eps.start <= te.date.max())]
+delays = []
+for e in eps.itertuples():
+    g = te[(te.supplier == e.supplier) & (te.date >= e.start.normalize() + pd.Timedelta(days=1)) & (te.date < e.end) & (te.p >= thr)]
+    delays.append((g.date.min() - e.start).days if len(g) else None)
+hit = [x for x in delays if x is not None]
+print(f"test episodes={len(eps)} detected={len(hit)} median_delay_days={np.median(hit):.1f} false_alarm_rate={(te.p[te[Y] == 0] >= thr).mean():.3f}")
+
+pd.concat([va.assign(split="val"), te.assign(split="test")])[["supplier", "date", "split", "p", Y]].rename(columns={"p": "p_disrupt"}).to_csv("results/risk_scores.csv", index=False)

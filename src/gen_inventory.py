@@ -5,8 +5,14 @@ import numpy as np
 import pandas as pd
 
 rng = np.random.default_rng(42)
-h = pd.read_csv("data/sku_history.csv")
-days = (pd.Timestamp("2018-02-01") - pd.Timestamp("2015-01-01")).days
+d = pd.read_csv("data/raw/dataco.csv", encoding="latin-1")
+d.columns = d.columns.str.strip()
+d = d[d["Delivery Status"] != "Shipping canceled"]
+h = d.groupby("Product Card Id").agg(qty=("Order Item Quantity", "sum"), name=("Product Name", "first"),
+                                     category=("Category Name", "first"), price=("Order Item Product Price", "mean"))
+h.index.name = "Product Card Id"
+h = h.reset_index()
+days =(pd.Timestamp("2018-02-01") - pd.Timestamp("2015-01-01")).days
 
 # 8 suppliers: lead time mean (days) ~ U(5,25), sd = 10-35% of mean, reliability (on-time share) ~ U(0.75,0.97)
 sup = pd.DataFrame({"supplier_id": [f"S{i}" for i in range(1, 9)]})

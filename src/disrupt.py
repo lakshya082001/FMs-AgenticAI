@@ -1,6 +1,7 @@
 """DataCo has no temporal dynamics (lane-level autocorrelation ~0), so overlay simulated supplier disruption episodes.
 Latent episodes raise P(late) for a supplier's orders; the model only sees trailing outcomes of already-delivered orders.
-Evaluation therefore measures detection of simulated disruptions, not real-world accuracy."""
+Output: supplier-day table, target = supplier is inside an episode on that day. Measures detection of simulated
+disruptions, not real-world accuracy."""
 import numpy as np
 import pandas as pd
 
@@ -10,12 +11,12 @@ d.columns = d.columns.str.strip()
 d = d[d["Delivery Status"] != "Shipping canceled"].reset_index(drop=True)
 t = pd.to_datetime(d["order date (DateOrders)"]).to_numpy()
 done = (pd.to_datetime(d["shipping date (DateOrders)"]) + pd.to_timedelta(d["Days for shipping (real)"], unit="D")).to_numpy()
-d["supplier"] = d["Product Card Id"].map(pd.read_csv("data/sku.csv").set_index("product_id").primary_supplier)
+sup = d["Product Card Id"].map(pd.read_csv("data/sku.csv").set_index("product_id").primary_supplier).to_numpy()
 
 # episodes: gap ~ Exp(75d), duration ~ U(7,21)d, severity = P(on-time order flips to late) ~ U(0.35,0.7)
 start, end = pd.Timestamp("2015-01-01"), pd.Timestamp("2018-02-01")
 eps = []
-for s in sorted(d.supplier.unique()):
+for s in sorted(set(sup)):
     x = start + pd.Timedelta(days=float(rng.exponential(60)))
     while x < end:
         dur = rng.uniform(7, 21)
@@ -26,28 +27,36 @@ eps.to_csv("data/episodes.csv", index=False)
 
 sev = np.zeros(len(d))
 for e in eps.itertuples():
-    sev[(d.supplier.to_numpy() == e.supplier) & (t >= e.start.to_datetime64()) & (t < e.end.to_datetime64())] = e.severity
+    sev[(sup == e.supplier) & (t >= e.start.to_datetime64()) & (t < e.end.to_datetime64())] = e.severity
 orig = d.Late_delivery_risk.to_numpy()
 late = np.where((orig == 0) & (rng.random(len(d)) < sev), 1, orig)
 
-# trailing supplier features from deliveries completed strictly before order time (no leakage)
-r7, r30, n7 = (np.full(len(d), np.nan) for _ in range(3))
-for s in d.supplier.unique():
-    ix = np.where(d.supplier.to_numpy() == s)[0]
+# supplier-day features at day start, from deliveries completed strictly before it (no leakage)
+days = pd.date_range("2015-04-01", "2017-09-30")  # first 90d dropped: warm-up for the 90d window
+D = days.to_numpy()
+frames = []
+for s in sorted(set(sup)):
+    ix = np.where(sup == s)[0]
     o = ix[np.argsort(done[ix])]
     comp, cs = done[o], np.concatenate([[0], np.cumsum(late[o])])
-    hi = np.searchsorted(comp, t[ix], "left")
-    for W, r in [(7, r7), (30, r30)]:
-        lo = np.searchsorted(comp, t[ix] - np.timedelta64(W, "D"), "left")
-        n = hi - lo
-        r[ix] = np.where(n > 0, (cs[hi] - cs[lo]) / np.maximum(n, 1), np.nan)
+    hi = np.searchsorted(comp, D, "left")
+    f = pd.DataFrame({"supplier": s, "date": days})
+    for W in [3, 7, 14, 30, 90]:
+        n = hi - np.searchsorted(comp, D - np.timedelta64(W, "D"), "left")
+        f[f"r{W}"] = np.where(n > 0, (cs[hi] - cs[hi - n]) / np.maximum(n, 1), np.nan)
         if W == 7:
-            n7[ix] = n
+            f["n7"] = n
+    f["dev3"], f["dev7"] = f.r3 - f.r30, f.r7 - f.r90
+    pos = np.arange(len(f))
+    last = pd.Series(np.where((f.dev7 > 0.10) & (f.n7 >= 20), pos, np.nan)).ffill()  # observed-only alert
+    f["days_since_alert"] = (pos - last).fillna(60).clip(upper=60)
+    e = eps[eps.supplier == s]
+    f["disrupted"] = np.any([(D >= a) & (D < b) for a, b in zip(e.start.to_numpy(), e.end.to_numpy())], axis=0).astype(int)
+    frames.append(f)
+f = pd.concat(frames)
 
-out = pd.DataFrame({
-    "Order Item Id": d["Order Item Id"], "Late_delivery_risk": late, "late_orig": orig, "in_episode": (sev > 0).astype(int),
-    "supplier": d.supplier, "sup_late_7d": r7, "sup_late_30d": r30, "sup_trend": r7 - r30, "sup_n7": n7,
-    "is_peak": (pd.to_datetime(d["order date (DateOrders)"]).dt.month >= 10).astype(int),
-})
-out.to_csv("data/sim_features.csv", index=False)
-print(f"episodes={len(eps)} in_episode_share={out.in_episode.mean():.3f} late: orig={orig.mean():.3f} sim={late.mean():.3f}")
+for name, (a, b) in {"train": ("2015-04-01", "2016-06-30"), "val": ("2016-07-01", "2016-12-31"), "test": ("2017-01-01", "2017-09-30")}.items():
+    s = f[(f.date >= a) & (f.date <= b)]
+    s.to_csv(f"data/{name}.csv", index=False)
+    print(name, s.shape, f"disrupted={s.disrupted.mean():.3f}")
+print(f"episodes={len(eps)} late: orig={orig.mean():.3f} sim={late.mean():.3f}")
