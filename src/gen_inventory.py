@@ -19,7 +19,8 @@ sup = pd.DataFrame({"supplier_id": [f"S{i}" for i in range(1, 9)]})
 sup["lead_mean"] = rng.uniform(5, 25, 8).round(1)
 sup["lead_sd"] = (sup.lead_mean * rng.uniform(0.1, 0.35, 8)).round(1)
 sup["reliability"] = rng.uniform(0.75, 0.97, 8).round(2)
-sup["cost_mult"] = rng.uniform(0.95, 1.25, 8).round(2)  # unit cost vs base; faster/more reliable tends to cost more
+# unit cost vs base: faster suppliers cost more (1.25 at 5d lead down to 0.95 at 25d) +/- 0.03 noise
+sup["cost_mult"] = (1.25 - 0.30 * (sup.lead_mean - 5) / 20 + rng.uniform(-0.03, 0.03, 8)).round(2)
 sup.to_csv("data/suppliers.csv", index=False)
 
 sku = pd.DataFrame({"product_id": h["Product Card Id"], "name": h.name, "category": h.category, "price": h.price.round(2)})

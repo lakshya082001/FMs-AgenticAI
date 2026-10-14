@@ -10,6 +10,7 @@ X = ["r3", "r7", "r14", "r30", "r90", "n7", "dev3", "dev7", "days_since_alert", 
 DELAY = 3.5            # expected extra days when disrupted (sim delays U{2..5})
 Z, SD_FRAC, CYCLE = 1.65, 0.5, 14  # service z, demand sd as share of mean, order cycle days
 EXPEDITE_CUT, EXPEDITE_PREMIUM = 0.4, 0.15
+SWITCH_FIXED, SWITCH_PREMIUM = 250.0, 0.05  # per-SKU qualification/setup cost, new-supplier price premium
 BAND, COST_GATE, TOP_N = 0.10, 10000.0, 5
 
 sku = pd.read_csv("data/sku.csv").set_index("product_id")
@@ -65,17 +66,18 @@ def calc_options(sku_id):
     s, p = sku.loc[sku_id], sup.loc[sku.loc[sku_id, "primary_supplier"]]
     cover = s.on_hand / s.daily_demand
 
-    def opt(name, lead, mult_from, mult_to):
+    def opt(name, lead, mult_from, mult_to, fixed=0.0):
         qty = math.ceil(max(0, s.daily_demand * (lead + CYCLE) + Z * SD_FRAC * s.daily_demand * math.sqrt(lead) - s.on_hand))
         short = max(0, lead - cover)
         return {"option": name, "lead_days": round(float(lead), 1), "order_qty": int(qty), "shortfall_days": round(float(short), 1),
-                "incremental_cost": round(float(qty * s.unit_cost * (mult_to - mult_from)), 2),
+                "incremental_cost": round(float(qty * s.unit_cost * (mult_to - mult_from) + fixed), 2),
                 "lost_sales_value": round(float(short * s.daily_demand * s.price), 2)}
 
     out = [opt("wait", p.lead_mean + DELAY, p.cost_mult, p.cost_mult),
            opt("expedite", p.lead_mean * (1 - EXPEDITE_CUT) + DELAY, p.cost_mult, p.cost_mult * (1 + EXPEDITE_PREMIUM))]
     for a in s.alt_suppliers.split("|"):  # alternates assumed undisrupted; expected delay scales with (1 - reliability)
-        out.append(opt(f"switch_{a}", sup.loc[a, "lead_mean"] + (1 - sup.loc[a, "reliability"]) * DELAY, p.cost_mult, sup.loc[a, "cost_mult"]))
+        out.append(opt(f"switch_{a}", sup.loc[a, "lead_mean"] + (1 - sup.loc[a, "reliability"]) * DELAY, p.cost_mult,
+                       sup.loc[a, "cost_mult"] * (1 + SWITCH_PREMIUM), SWITCH_FIXED))
     return out
 
 

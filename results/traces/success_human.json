@@ -13,7 +13,7 @@
     "in-transit orders past promised date: 48 (29% of in-transit; training median 29%)",
     "days since last observed alert: 60"
    ],
-   "summary": "Supplier S6 is possibly disrupted as it is currently in an alert status, with a probability of disruption above the established threshold. The late rates indicate a slight increase in delays compared to recent baselines, which may suggest ongoing issues.",
+   "summary": "Supplier S6 is possibly disrupted as it is currently in an alert status, with a probability of disruption above the established threshold. The late rates indicate a slight increase in delays, which may contribute to the overall risk assessment.",
    "error": null
   },
   "exposure": {
@@ -147,43 +147,43 @@
    "items": [
     {
      "sku_id": 403,
-     "option": "switch_S2",
-     "shortfall_days": 10.8,
-     "incremental_cost": -5775.94,
-     "lost_sales_value": 26551.34,
-     "rationale": "This option minimizes the total cost by providing a negative incremental cost while keeping lost sales value manageable."
+     "option": "switch_S3",
+     "shortfall_days": 18.6,
+     "incremental_cost": 3990.01,
+     "lost_sales_value": 45696.31,
+     "rationale": "This option minimizes the total of incremental cost and lost sales value."
     },
     {
      "sku_id": 1014,
      "option": "expedite",
      "shortfall_days": 0.0,
-     "incremental_cost": 4283.47,
+     "incremental_cost": 3613.02,
      "lost_sales_value": 0.0,
-     "rationale": "This option eliminates lost sales completely, making it the best choice despite the incremental cost."
+     "rationale": "This option eliminates lost sales and has a reasonable incremental cost."
     },
     {
      "sku_id": 1349,
-     "option": "switch_S1",
-     "shortfall_days": 17.0,
-     "incremental_cost": 146.46,
-     "lost_sales_value": 3832.17,
-     "rationale": "This option has the lowest incremental cost while keeping lost sales value relatively low."
+     "option": "expedite",
+     "shortfall_days": 14.2,
+     "incremental_cost": 631.4,
+     "lost_sales_value": 3209.48,
+     "rationale": "This option has the lowest combined cost of incremental cost and lost sales value."
     },
     {
      "sku_id": 1358,
      "option": "expedite",
      "shortfall_days": 2.0,
-     "incremental_cost": 215.82,
+     "incremental_cost": 182.04,
      "lost_sales_value": 191.32,
-     "rationale": "This option minimizes lost sales significantly while keeping incremental costs low."
+     "rationale": "This option has the lowest total cost and minimizes shortfall days."
     },
     {
      "sku_id": 278,
      "option": "expedite",
      "shortfall_days": 11.0,
-     "incremental_cost": 93.12,
+     "incremental_cost": 78.54,
      "lost_sales_value": 340.03,
-     "rationale": "This option balances a low incremental cost with a reasonable shortfall period."
+     "rationale": "This option has the lowest incremental cost and a manageable shortfall."
     }
    ]
   },
@@ -216,7 +216,7 @@
      "in-transit orders past promised date: 48 (29% of in-transit; training median 29%)",
      "days since last observed alert: 60"
     ],
-    "summary": "Supplier S6 is possibly disrupted as it is currently in an alert status, with a probability of disruption above the established threshold. The late rates indicate a slight increase in delays compared to recent baselines, which may suggest ongoing issues.",
+    "summary": "Supplier S6 is possibly disrupted as it is currently in an alert status, with a probability of disruption above the established threshold. The late rates indicate a slight increase in delays, which may contribute to the overall risk assessment.",
     "error": null
    }
   },
@@ -367,43 +367,43 @@
     "items": [
      {
       "sku_id": 403,
-      "option": "switch_S2",
-      "shortfall_days": 10.8,
-      "incremental_cost": -5775.94,
-      "lost_sales_value": 26551.34,
-      "rationale": "This option minimizes the total cost by providing a negative incremental cost while keeping lost sales value manageable."
+      "option": "switch_S3",
+      "shortfall_days": 18.6,
+      "incremental_cost": 3990.01,
+      "lost_sales_value": 45696.31,
+      "rationale": "This option minimizes the total of incremental cost and lost sales value."
      },
      {
       "sku_id": 1014,
       "option": "expedite",
       "shortfall_days": 0.0,
-      "incremental_cost": 4283.47,
+      "incremental_cost": 3613.02,
       "lost_sales_value": 0.0,
-      "rationale": "This option eliminates lost sales completely, making it the best choice despite the incremental cost."
+      "rationale": "This option eliminates lost sales and has a reasonable incremental cost."
      },
      {
       "sku_id": 1349,
-      "option": "switch_S1",
-      "shortfall_days": 17.0,
-      "incremental_cost": 146.46,
-      "lost_sales_value": 3832.17,
-      "rationale": "This option has the lowest incremental cost while keeping lost sales value relatively low."
+      "option": "expedite",
+      "shortfall_days": 14.2,
+      "incremental_cost": 631.4,
+      "lost_sales_value": 3209.48,
+      "rationale": "This option has the lowest combined cost of incremental cost and lost sales value."
      },
      {
       "sku_id": 1358,
       "option": "expedite",
       "shortfall_days": 2.0,
-      "incremental_cost": 215.82,
+      "incremental_cost": 182.04,
       "lost_sales_value": 191.32,
-      "rationale": "This option minimizes lost sales significantly while keeping incremental costs low."
+      "rationale": "This option has the lowest total cost and minimizes shortfall days."
      },
      {
       "sku_id": 278,
       "option": "expedite",
       "shortfall_days": 11.0,
-      "incremental_cost": 93.12,
+      "incremental_cost": 78.54,
       "lost_sales_value": 340.03,
-      "rationale": "This option balances a low incremental cost with a reasonable shortfall period."
+      "rationale": "This option has the lowest incremental cost and a manageable shortfall."
      }
     ]
    }
@@ -439,8 +439,8 @@
  ],
  "llm_usage": {
   "calls": 3,
-  "in_tokens": 1735,
-  "out_tokens": 509
+  "in_tokens": 1736,
+  "out_tokens": 496
  },
- "seconds": 39.8
+ "seconds": 39.0
 }
