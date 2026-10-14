@@ -1,0 +1,119 @@
+product_id,name,category,price,daily_demand,unit_cost,on_hand,primary_supplier,alt_suppliers
+19,Nike Men's Fingertrap Max Training Shoe,Soccer,124.99,0.06,74.99,1,S3,S6|S1
+24,Elevation Training Mask 2.0,Soccer,79.99,0.2,47.99,3,S3,S5|S1
+35,adidas Brazuca 2014 Official Match Ball,Baseball & Softball,159.99,0.06,95.99,1,S5,S1|S4
+37,adidas Kids' F5 Messi FG Soccer Cleat,Baseball & Softball,34.99,0.66,20.99,5,S4,S6|S8
+44,adidas Men's F10 Messi TRX FG Soccer Cleat,Baseball & Softball,59.99,0.81,35.99,5,S2,S1|S5
+58,Diamondback Boys' Insight 24 Performance Hybr,Basketball,299.99,0.02,179.99,0,S1,S7|S2
+60,SOLE E25 Elliptical,Basketball,999.99,0.01,599.99,0,S3,S4|S8
+61,Diamondback Girls' Clarity 24 Hybrid Bike 201,Basketball,299.99,0.02,179.99,0,S3,S7|S5
+78,Nike Kids' Grade School KD VI Basketball Shoe,Lacrosse,99.99,0.16,59.99,2,S4,S5|S3
+93,Under Armour Men's Tech II T-Shirt,Lacrosse,24.99,0.71,14.99,18,S7,S8|S2
+116,Nike Men's Comfort 2 Slide,Tennis & Racquet,44.99,0.85,26.99,19,S4,S3|S1
+127,Stiga Master Series ST3100 Competition Indoor,Hockey,329.99,0.02,197.99,0,S8,S2|S6
+134,Nike Women's Legend V-Neck T-Shirt,Hockey,25.0,0.68,15.0,17,S7,S6|S2
+135,Nike Dri-FIT Crew Sock 6 Pack,Hockey,22.0,0.75,13.2,19,S3,S7|S4
+172,Nike Women's Tempo Shorts,Cardio Equipment,30.0,0.76,18.0,10,S3,S4|S5
+191,Nike Men's Free 5.0+ Running Shoe,Cardio Equipment,99.99,31.13,59.99,336,S8,S1|S6
+203,GoPro HERO3+ Black Edition Camera,Strength Training,399.99,0.03,239.99,1,S7,S8|S1
+208,SOLE E35 Elliptical,Strength Training,1999.99,0.01,1199.99,0,S7,S1|S8
+216,Yakima DoubleDown Ace Hitch Mount 4-Bike Rack,Strength Training,189.0,0.06,113.4,1,S5,S3|S2
+226,Bowflex SelectTech 1090 Dumbbells,Fitness Accessories,599.99,0.01,359.99,0,S1,S2|S6
+235,Under Armour Hustle Storm Medium Duffle Bag,Fitness Accessories,34.99,0.72,20.99,17,S7,S6|S3
+249,Under Armour Women's Micro G Skulpt Running S,Boxing & MMA,54.97,0.71,32.98,15,S7,S4|S2
+251,Brooks Women's Ghost 6 Running Shoe,Boxing & MMA,89.99,0.18,53.99,4,S7,S3|S2
+258,Nike Women's Free 5.0 TR FIT PRT 4 Training S,Boxing & MMA,94.99,0.18,56.99,4,S1,S7|S5
+273,Under Armour Kids' Mercenary Slide,Electronics,27.99,0.67,16.79,10,S7,S6|S5
+276,Under Armour Women's Ignite Slide,Electronics,31.99,0.77,19.19,14,S8,S7|S2
+278,Under Armour Men's Compression EV SL Slide,Electronics,44.99,0.69,26.99,5,S6,S7|S1
+282,Under Armour Women's Ignite PIP VI Slide,Electronics,31.99,0.72,19.19,4,S4,S8|S1
+295,Fitbit The One Wireless Activity & Sleep Trac,Kids' Golf Clubs,99.95,0.16,59.97,3,S6,S2|S3
+303,Garmin Forerunner 910XT GPS Watch,Kids' Golf Clubs,399.99,0.03,239.99,0,S8,S4|S3
+305,Mio ALPHA Heart Rate Monitor/Sport Watch,Kids' Golf Clubs,199.0,0.06,119.4,1,S4,S7|S6
+306,Polar FT4 Heart Rate Monitor,Kids' Golf Clubs,89.99,0.17,53.99,4,S2,S4|S6
+311,Polar Loop Activity Tracker,Kids' Golf Clubs,109.95,0.04,65.97,1,S6,S5|S1
+359,Nike Men's Free TR 5.0 TB Training Shoe,As Seen on  TV!,99.99,0.18,59.99,3,S5,S2|S6
+364,Total Gym 1400,Cleats,299.99,0.03,179.99,1,S5,S4|S6
+365,Perfect Fitness Perfect Rip Deck,Cleats,59.99,62.62,35.99,702,S1,S5|S6
+403,Nike Men's CJ Elite 2 TD Football Cleat,Men's Footwear,129.99,18.87,77.99,72,S6,S2|S3
+502,Nike Men's Dri-FIT Victory Golf Polo,Women's Apparel,50.0,53.44,30.0,790,S2,S3|S5
+564,Nike Men's Deutschland Weltmeister Winners Bl,Girls' Apparel,30.0,0.75,18.0,7,S8,S6|S7
+565,adidas Youth Germany Black/Red Away Match Soc,Girls' Apparel,70.0,0.8,42.0,11,S1,S3|S8
+567,adidas Men's Germany Black Crest Away Tee,Girls' Apparel,25.0,0.73,15.0,19,S5,S1|S8
+572,TYR Boys' Team Digi Jammer,Girls' Apparel,39.99,0.74,23.99,7,S4,S2|S3
+607,Garmin Approach S3 Golf GPS Watch,Trade-In,249.99,0.07,149.99,0,S6,S7|S8
+625,Nike Men's Kobe IX Elite Low Basketball Shoe,Shop By Sport,199.99,0.05,119.99,1,S1,S8|S7
+627,Under Armour Girls' Toddler Spine Surge Runni,Shop By Sport,39.99,26.96,23.99,295,S2,S3|S8
+642,Columbia Men's PFG Anchor Tough T-Shirt,Shop By Sport,30.0,0.79,18.0,16,S2,S7|S8
+646,Merrell Women's Grassbow Sport Hiking Shoe,Men's Golf Clubs,99.99,0.18,59.99,3,S8,S2|S4
+647,Merrell Women's Siren Mid Waterproof Hiking B,Men's Golf Clubs,134.99,0.06,80.99,1,S8,S1|S4
+652,Merrell Women's Grassbow Sport Waterproof Hik,Men's Golf Clubs,129.99,0.05,77.99,1,S2,S1|S5
+666,Merrell Men's All Out Flash Trail Running Sho,Men's Golf Clubs,109.99,0.07,65.99,1,S1,S5|S4
+671,Cleveland Golf Collegiate My Custom Wedge 588,Women's Golf Clubs,209.99,0.06,125.99,1,S7,S3|S5
+677,TaylorMade White Smoke IN-12 Putter,Women's Golf Clubs,99.99,0.16,59.99,1,S4,S6|S8
+691,MDGolf Pittsburgh Penguins Putter,Women's Golf Clubs,79.99,0.12,47.99,0,S8,S1|S4
+703,Top Flite Women's 2014 XL Hybrid,Golf Apparel,19.99,0.77,11.99,4,S2,S8|S7
+705,Cleveland Golf Women's 588 RTX CB Satin Chrom,Golf Apparel,119.99,0.06,71.99,1,S3,S8|S6
+715,TaylorMade Women's RBZ SL Rescue,Golf Apparel,129.99,0.06,77.99,1,S7,S3|S5
+724,LIJA Women's Mid-Length Panel Golf Shorts,Golf Shoes,100.0,0.2,60.0,1,S6,S8|S1
+725,LIJA Women's Button Golf Dress,Golf Shoes,108.0,0.06,64.8,1,S6,S5|S1
+728,LIJA Women's Eyelet Sleeveless Golf Polo,Golf Shoes,65.0,0.8,39.0,6,S7,S5|S2
+730,LIJA Women's Argyle Golf Polo,Golf Shoes,80.0,0.17,48.0,4,S5,S8|S7
+743,Ogio Race Golf Shoes,Golf Bags & Carts,169.99,0.05,101.99,1,S8,S6|S4
+768,Titleist Club Glove Travel Cover,Golf Gloves,299.99,0.03,179.99,0,S4,S3|S5
+771,Clicgear Rovic Cooler Bag,Golf Gloves,39.99,0.73,23.99,8,S6,S7|S4
+773,Titleist Small Wheeled Travel Cover,Golf Gloves,249.99,0.05,149.99,1,S2,S3|S4
+775,Clicgear 8.0 Shoe Brush,Golf Gloves,9.99,0.75,5.99,10,S3,S2|S4
+777,Bag Boy M330 Push Cart,Golf Gloves,79.99,0.18,47.99,1,S8,S2|S3
+778,Bag Boy Beverage Holder,Golf Gloves,24.99,0.72,14.99,4,S4,S5|S3
+786,TaylorMade 2014 Purelite Stand Bag,Golf Gloves,179.99,0.06,107.99,2,S5,S2|S3
+792,Hirzl Men's Hybrid Golf Glove,Golf Balls,14.99,0.73,8.99,20,S5,S8|S7
+793,Hirzl Women's Hybrid Golf Glove,Golf Balls,14.99,0.74,8.99,16,S2,S4|S5
+797,Hirzl Women's Soffft Flex Golf Glove,Golf Balls,17.99,0.76,10.79,8,S3,S5|S2
+804,Glove It Women's Imperial Golf Glove,Golf Balls,19.99,0.8,11.99,23,S6,S8|S4
+810,Glove It Women's Mod Oval Golf Glove,Golf Balls,19.99,0.66,11.99,16,S1,S6|S2
+818,Titleist Pro V1x Golf Balls,Electronics,47.99,0.75,28.79,17,S4,S5|S7
+821,Titleist Pro V1 High Numbers Personalized Gol,Electronics,51.99,0.73,31.19,11,S8,S5|S6
+822,Titleist Pro V1x High Numbers Golf Balls,Electronics,47.99,0.69,28.79,7,S5,S1|S7
+823,Titleist Pro V1x High Numbers Personalized Go,Electronics,51.99,0.78,31.19,4,S1,S5|S8
+825,Bridgestone e6 Straight Distance NFL Tennesse,Electronics,31.99,0.67,19.19,18,S5,S8|S3
+828,Bridgestone e6 Straight Distance NFL San Dieg,Electronics,31.99,0.78,19.19,12,S7,S6|S8
+835,Bridgestone e6 Straight Distance NFL Carolina,Electronics,31.99,0.79,19.19,7,S6,S5|S2
+845,Garmin Approach S4 Golf GPS Watch,Kids' Golf Clubs,299.99,0.03,179.99,0,S5,S2|S4
+858,GolfBuddy VT3 GPS Watch,Kids' Golf Clubs,199.99,0.05,119.99,1,S5,S4|S1
+860,Bushnell Pro X7 Jolt Slope Rangefinder,Kids' Golf Clubs,599.99,0.01,359.99,0,S5,S4|S6
+885,Team Golf St. Louis Cardinals Putter Grip,Accessories,24.99,0.82,14.99,21,S8,S4|S5
+886,Team Golf San Francisco Giants Putter Grip,Accessories,24.99,0.73,14.99,17,S8,S7|S1
+893,Team Golf Pittsburgh Steelers Putter Grip,Accessories,24.99,0.78,14.99,17,S1,S8|S6
+897,Team Golf New England Patriots Putter Grip,Accessories,24.99,0.7,14.99,10,S3,S5|S8
+905,Team Golf Texas Longhorns Putter Grip,Accessories,24.99,0.75,14.99,15,S5,S6|S3
+906,Team Golf Tennessee Volunteers Putter Grip,Accessories,24.99,0.77,14.99,14,S8,S6|S5
+917,Glove It Women's Mod Oval 3-Zip Carry All Gol,Trade-In,21.99,0.79,13.19,16,S4,S8|S3
+924,Glove It Urban Brick Golf Towel,Trade-In,15.99,0.74,9.59,4,S6,S2|S1
+926,Glove It Imperial Golf Towel,Trade-In,15.99,0.78,9.59,11,S4,S6|S3
+957,Diamondback Women's Serene Classic Comfort Bi,Camping & Hiking,299.98,11.67,179.99,48,S4,S2|S8
+977,ENO Atlas Hammock Straps,Hunting & Shooting,29.99,0.86,17.99,14,S7,S4|S5
+981,The North Face Women's Recon Backpack,Hunting & Shooting,99.0,0.15,59.4,2,S4,S7|S1
+982,insta-bed Neverflat Air Mattress,Hunting & Shooting,149.99,0.05,89.99,0,S1,S3|S6
+1004,Field & Stream Sportsman 16 Gun Fire Safe,Fishing,399.98,14.72,239.99,85,S5,S1|S6
+1014,O'Brien Men's Neoprene Life Vest,Indoor/Outdoor Games,49.98,49.1,29.99,926,S6,S4|S1
+1059,Pelican Maverick 100X Kayak,Water Sports,349.99,0.04,209.99,0,S4,S1|S6
+1073,Pelican Sunstream 100 Kayak,Water Sports,199.99,13.17,119.99,368,S7,S4|S2
+1346,Sports Books ,Books ,31.08,0.35,18.65,7,S1,S3|S5
+1347,Baby sweater,Baby ,59.08,0.18,35.45,2,S5,S1|S4
+1348,CDs of rock,CDs ,11.29,0.23,6.77,4,S6,S7|S1
+1349,Web Camera,Cameras ,452.04,0.5,271.22,2,S6,S8|S1
+1350,Children's heaters,Children's Clothing,357.1,0.55,214.26,16,S1,S2|S5
+1351,Dell Laptop,Computers,1500.0,0.38,900.0,6,S5,S1|S8
+1352,Industrial consumer electronics,Consumer Electronics,252.88,0.36,151.73,9,S4,S7|S2
+1353,Porcelain crafts,Crafts,461.48,0.41,276.89,2,S2,S6|S5
+1354,DVDs ,DVDs,164.38,0.41,98.63,7,S5,S8|S2
+1355,Lawn mower,Garden,532.58,0.41,319.55,7,S1,S2|S8
+1356,First aid kit,Health and Beauty,293.04,0.31,175.82,9,S7,S8|S6
+1357,Men's gala suit,Men's Clothing,210.85,0.18,126.51,3,S6,S2|S1
+1358,Rock music,Music,260.65,0.37,156.39,6,S6,S7|S1
+1359,Adult dog supplies,Pet Supplies,84.4,0.42,50.64,4,S7,S5|S6
+1360,Smart watch ,Sporting Goods,327.75,0.3,196.65,4,S1,S2|S3
+1361,Toys ,Toys,11.54,0.45,6.92,8,S4,S6|S7
+1362,Fighting video games,Video Games,39.75,0.71,23.85,11,S4,S6|S1
+1363,Summer dresses,Women's Clothing,215.82,0.56,129.49,2,S1,S2|S5
