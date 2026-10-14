@@ -13,7 +13,7 @@
     "in-transit orders past promised date: 48 (29% of in-transit; training median 29%)",
     "days since last observed alert: 60"
    ],
-   "summary": "Supplier S6 is possibly disrupted as it is currently in an alert status, with a probability of disruption above the established threshold. The late rates indicate a slight increase in delays, which may contribute to the overall risk assessment.",
+   "summary": "Supplier S6 is possibly disrupted as it is currently in an alert status, with a probability of disruption above the established threshold. The late rates indicate a slight increase in delays compared to recent baselines, which may suggest ongoing issues.",
    "error": null
   },
   "exposure": {
@@ -147,11 +147,11 @@
    "items": [
     {
      "sku_id": 403,
-     "option": "switch_S3",
-     "shortfall_days": 18.6,
-     "incremental_cost": 3990.01,
-     "lost_sales_value": 45696.31,
-     "rationale": "This option minimizes the total of incremental cost and lost sales value."
+     "option": "switch_S2",
+     "shortfall_days": 10.8,
+     "incremental_cost": 7882.49,
+     "lost_sales_value": 26551.34,
+     "rationale": "This option minimizes the total cost of incremental cost and lost sales value."
     },
     {
      "sku_id": 1014,
@@ -167,7 +167,7 @@
      "shortfall_days": 14.2,
      "incremental_cost": 631.4,
      "lost_sales_value": 3209.48,
-     "rationale": "This option has the lowest combined cost of incremental cost and lost sales value."
+     "rationale": "This option has the lowest incremental cost while minimizing lost sales."
     },
     {
      "sku_id": 1358,
@@ -175,7 +175,7 @@
      "shortfall_days": 2.0,
      "incremental_cost": 182.04,
      "lost_sales_value": 191.32,
-     "rationale": "This option has the lowest total cost and minimizes shortfall days."
+     "rationale": "This option has the lowest incremental cost and a minimal lost sales value."
     },
     {
      "sku_id": 278,
@@ -183,7 +183,7 @@
      "shortfall_days": 11.0,
      "incremental_cost": 78.54,
      "lost_sales_value": 340.03,
-     "rationale": "This option has the lowest incremental cost and a manageable shortfall."
+     "rationale": "This option has a low incremental cost and a manageable lost sales value."
     }
    ]
   },
@@ -216,7 +216,7 @@
      "in-transit orders past promised date: 48 (29% of in-transit; training median 29%)",
      "days since last observed alert: 60"
     ],
-    "summary": "Supplier S6 is possibly disrupted as it is currently in an alert status, with a probability of disruption above the established threshold. The late rates indicate a slight increase in delays, which may contribute to the overall risk assessment.",
+    "summary": "Supplier S6 is possibly disrupted as it is currently in an alert status, with a probability of disruption above the established threshold. The late rates indicate a slight increase in delays compared to recent baselines, which may suggest ongoing issues.",
     "error": null
    }
   },
@@ -395,7 +395,7 @@
       "shortfall_days": 2.0,
       "incremental_cost": 182.04,
       "lost_sales_value": 191.32,
-      "rationale": "This option has the lowest total cost and minimizes shortfall days."
+      "rationale": "This option minimizes both incremental cost and lost sales value effectively."
      },
      {
       "sku_id": 278,
@@ -403,7 +403,74 @@
       "shortfall_days": 11.0,
       "incremental_cost": 78.54,
       "lost_sales_value": 340.03,
-      "rationale": "This option has the lowest incremental cost and a manageable shortfall."
+      "rationale": "This option has the lowest incremental cost while keeping lost sales value manageable."
+     }
+    ]
+   }
+  },
+  {
+   "node": "orchestrator",
+   "next": "check",
+   "reason": "verify plan numbers"
+  },
+  {
+   "node": "check",
+   "output": {
+    "ok": false,
+    "errors": [
+     "sku 403: switch_S3 total 49686 vs cheapest switch_S2 total 34434"
+    ]
+   }
+  },
+  {
+   "node": "orchestrator",
+   "next": "planner",
+   "reason": "check failed, retry once"
+  },
+  {
+   "node": "planner_agent",
+   "attempt": 2,
+   "output": {
+    "items": [
+     {
+      "sku_id": 403,
+      "option": "switch_S2",
+      "shortfall_days": 10.8,
+      "incremental_cost": 7882.49,
+      "lost_sales_value": 26551.34,
+      "rationale": "This option minimizes the total cost of incremental cost and lost sales value."
+     },
+     {
+      "sku_id": 1014,
+      "option": "expedite",
+      "shortfall_days": 0.0,
+      "incremental_cost": 3613.02,
+      "lost_sales_value": 0.0,
+      "rationale": "This option eliminates lost sales and has a reasonable incremental cost."
+     },
+     {
+      "sku_id": 1349,
+      "option": "expedite",
+      "shortfall_days": 14.2,
+      "incremental_cost": 631.4,
+      "lost_sales_value": 3209.48,
+      "rationale": "This option has the lowest incremental cost while minimizing lost sales."
+     },
+     {
+      "sku_id": 1358,
+      "option": "expedite",
+      "shortfall_days": 2.0,
+      "incremental_cost": 182.04,
+      "lost_sales_value": 191.32,
+      "rationale": "This option has the lowest incremental cost and a minimal lost sales value."
+     },
+     {
+      "sku_id": 278,
+      "option": "expedite",
+      "shortfall_days": 11.0,
+      "incremental_cost": 78.54,
+      "lost_sales_value": 340.03,
+      "rationale": "This option has a low incremental cost and a manageable lost sales value."
      }
     ]
    }
@@ -438,9 +505,9 @@
   }
  ],
  "llm_usage": {
-  "calls": 3,
-  "in_tokens": 1736,
-  "out_tokens": 496
+  "calls": 4,
+  "in_tokens": 3023,
+  "out_tokens": 884
  },
- "seconds": 39.0
+ "seconds": 47.0
 }

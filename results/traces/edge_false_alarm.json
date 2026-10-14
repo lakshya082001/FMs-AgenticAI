@@ -1,0 +1,369 @@
+{
+ "final": {
+  "risk": {
+   "supplier": "S7",
+   "date": "2017-01-01",
+   "p_disrupt": 0.714,
+   "threshold": 0.25000000000000006,
+   "at_risk": true,
+   "borderline": false,
+   "evidence": [
+    "7d late rate 0.76 vs 90d baseline 0.60 (+0.16)",
+    "3d late rate 0.81 vs 30d 0.59 (+0.22)",
+    "in-transit orders past promised date: 32 (46% of in-transit; training median 29%)",
+    "days since last observed alert: 0"
+   ],
+   "summary": "Supplier S7 is likely disrupted due to a high probability of disruption and an alert status that exceeds the threshold. The significant increase in late rates and the high percentage of in-transit orders past the promised date further support this assessment.",
+   "error": null
+  },
+  "exposure": {
+   "supplier": "S7",
+   "n_skus": 16,
+   "skus": [
+    {
+     "sku_id": 728,
+     "name": "LIJA Women's Eyelet Sleeveless Golf Polo",
+     "days_cover": 7.5,
+     "lead_days": 23.7,
+     "shortfall_days": 16.2,
+     "value_at_risk": 842.4
+    },
+    {
+     "sku_id": 1359,
+     "name": "Adult dog supplies",
+     "days_cover": 9.5,
+     "lead_days": 23.7,
+     "shortfall_days": 14.2,
+     "value_at_risk": 502.52
+    },
+    {
+     "sku_id": 208,
+     "name": "SOLE E35 Elliptical",
+     "days_cover": 0.0,
+     "lead_days": 23.7,
+     "shortfall_days": 23.7,
+     "value_at_risk": 474.0
+    },
+    {
+     "sku_id": 828,
+     "name": "Bridgestone e6 Straight Distance NFL San Dieg",
+     "days_cover": 15.4,
+     "lead_days": 23.7,
+     "shortfall_days": 8.3,
+     "value_at_risk": 207.49
+    },
+    {
+     "sku_id": 977,
+     "name": "ENO Atlas Hammock Straps",
+     "days_cover": 16.3,
+     "lead_days": 23.7,
+     "shortfall_days": 7.4,
+     "value_at_risk": 191.4
+    },
+    {
+     "sku_id": 273,
+     "name": "Under Armour Kids' Mercenary Slide",
+     "days_cover": 14.9,
+     "lead_days": 23.7,
+     "shortfall_days": 8.8,
+     "value_at_risk": 164.55
+    },
+    {
+     "sku_id": 249,
+     "name": "Under Armour Women's Micro G Skulpt Running S",
+     "days_cover": 21.1,
+     "lead_days": 23.7,
+     "shortfall_days": 2.6,
+     "value_at_risk": 100.43
+    },
+    {
+     "sku_id": 671,
+     "name": "Cleveland Golf Collegiate My Custom Wedge 588",
+     "days_cover": 16.7,
+     "lead_days": 23.7,
+     "shortfall_days": 7.0,
+     "value_at_risk": 88.62
+    },
+    {
+     "sku_id": 715,
+     "name": "TaylorMade Women's RBZ SL Rescue",
+     "days_cover": 16.7,
+     "lead_days": 23.7,
+     "shortfall_days": 7.0,
+     "value_at_risk": 54.86
+    },
+    {
+     "sku_id": 251,
+     "name": "Brooks Women's Ghost 6 Running Shoe",
+     "days_cover": 22.2,
+     "lead_days": 23.7,
+     "shortfall_days": 1.5,
+     "value_at_risk": 23.94
+    },
+    {
+     "sku_id": 235,
+     "name": "Under Armour Hustle Storm Medium Duffle Bag",
+     "days_cover": 23.6,
+     "lead_days": 23.7,
+     "shortfall_days": 0.1,
+     "value_at_risk": 2.24
+    }
+   ],
+   "summary": "The SKUs most exposed to stockouts are the LIJA Women's Eyelet Sleeveless Golf Polo and the SOLE E35 Elliptical, with shortfall days of 16.2 and 23.7 respectively, indicating they will run out of stock before the next resupply. Their high value at risk further emphasizes the urgency to address these shortages."
+  },
+  "plan": {
+   "items": [
+    {
+     "sku_id": 728,
+     "option": "switch_S5",
+     "shortfall_days": 0.0,
+     "incremental_cost": 361.54,
+     "lost_sales_value": 0.0,
+     "rationale": "This option eliminates shortfall days and has a manageable incremental cost."
+    },
+    {
+     "sku_id": 1359,
+     "option": "switch_S5",
+     "shortfall_days": 0.0,
+     "incremental_cost": 316.84,
+     "lost_sales_value": 0.0,
+     "rationale": "This option eliminates shortfall days and has a manageable incremental cost."
+    },
+    {
+     "sku_id": 208,
+     "option": "expedite",
+     "shortfall_days": 15.6,
+     "incremental_cost": 187.2,
+     "lost_sales_value": 312.4,
+     "rationale": "This option has the lowest incremental cost while minimizing lost sales value."
+    },
+    {
+     "sku_id": 828,
+     "option": "expedite",
+     "shortfall_days": 0.2,
+     "incremental_cost": 41.91,
+     "lost_sales_value": 5.87,
+     "rationale": "This option minimizes both incremental cost and lost sales value effectively."
+    },
+    {
+     "sku_id": 977,
+     "option": "expedite",
+     "shortfall_days": 0.0,
+     "incremental_cost": 42.1,
+     "lost_sales_value": 0.0,
+     "rationale": "This option eliminates shortfall days and has the lowest incremental cost."
+    }
+   ]
+  },
+  "verdict": {
+   "ok": true,
+   "errors": []
+  },
+  "human": null
+ },
+ "trace": [
+  {
+   "node": "orchestrator",
+   "next": "risk",
+   "reason": "start"
+  },
+  {
+   "node": "risk_agent",
+   "output": {
+    "supplier": "S7",
+    "date": "2017-01-01",
+    "p_disrupt": 0.714,
+    "threshold": 0.25000000000000006,
+    "at_risk": true,
+    "borderline": false,
+    "evidence": [
+     "7d late rate 0.76 vs 90d baseline 0.60 (+0.16)",
+     "3d late rate 0.81 vs 30d 0.59 (+0.22)",
+     "in-transit orders past promised date: 32 (46% of in-transit; training median 29%)",
+     "days since last observed alert: 0"
+    ],
+    "summary": "Supplier S7 is likely disrupted due to a high probability of disruption and an alert status that exceeds the threshold. The significant increase in late rates and the high percentage of in-transit orders past the promised date further support this assessment.",
+    "error": null
+   }
+  },
+  {
+   "node": "orchestrator",
+   "next": "exposure",
+   "reason": "supplier at risk"
+  },
+  {
+   "node": "exposure_agent",
+   "output": {
+    "supplier": "S7",
+    "n_skus": 16,
+    "skus": [
+     {
+      "sku_id": 728,
+      "name": "LIJA Women's Eyelet Sleeveless Golf Polo",
+      "days_cover": 7.5,
+      "lead_days": 23.7,
+      "shortfall_days": 16.2,
+      "value_at_risk": 842.4
+     },
+     {
+      "sku_id": 1359,
+      "name": "Adult dog supplies",
+      "days_cover": 9.5,
+      "lead_days": 23.7,
+      "shortfall_days": 14.2,
+      "value_at_risk": 502.52
+     },
+     {
+      "sku_id": 208,
+      "name": "SOLE E35 Elliptical",
+      "days_cover": 0.0,
+      "lead_days": 23.7,
+      "shortfall_days": 23.7,
+      "value_at_risk": 474.0
+     },
+     {
+      "sku_id": 828,
+      "name": "Bridgestone e6 Straight Distance NFL San Dieg",
+      "days_cover": 15.4,
+      "lead_days": 23.7,
+      "shortfall_days": 8.3,
+      "value_at_risk": 207.49
+     },
+     {
+      "sku_id": 977,
+      "name": "ENO Atlas Hammock Straps",
+      "days_cover": 16.3,
+      "lead_days": 23.7,
+      "shortfall_days": 7.4,
+      "value_at_risk": 191.4
+     },
+     {
+      "sku_id": 273,
+      "name": "Under Armour Kids' Mercenary Slide",
+      "days_cover": 14.9,
+      "lead_days": 23.7,
+      "shortfall_days": 8.8,
+      "value_at_risk": 164.55
+     },
+     {
+      "sku_id": 249,
+      "name": "Under Armour Women's Micro G Skulpt Running S",
+      "days_cover": 21.1,
+      "lead_days": 23.7,
+      "shortfall_days": 2.6,
+      "value_at_risk": 100.43
+     },
+     {
+      "sku_id": 671,
+      "name": "Cleveland Golf Collegiate My Custom Wedge 588",
+      "days_cover": 16.7,
+      "lead_days": 23.7,
+      "shortfall_days": 7.0,
+      "value_at_risk": 88.62
+     },
+     {
+      "sku_id": 715,
+      "name": "TaylorMade Women's RBZ SL Rescue",
+      "days_cover": 16.7,
+      "lead_days": 23.7,
+      "shortfall_days": 7.0,
+      "value_at_risk": 54.86
+     },
+     {
+      "sku_id": 251,
+      "name": "Brooks Women's Ghost 6 Running Shoe",
+      "days_cover": 22.2,
+      "lead_days": 23.7,
+      "shortfall_days": 1.5,
+      "value_at_risk": 23.94
+     },
+     {
+      "sku_id": 235,
+      "name": "Under Armour Hustle Storm Medium Duffle Bag",
+      "days_cover": 23.6,
+      "lead_days": 23.7,
+      "shortfall_days": 0.1,
+      "value_at_risk": 2.24
+     }
+    ],
+    "summary": "The SKUs most exposed to stockouts are the LIJA Women's Eyelet Sleeveless Golf Polo and the SOLE E35 Elliptical, with shortfall days of 16.2 and 23.7 respectively, indicating they will run out of stock before the next resupply. Their high value at risk further emphasizes the urgency to address these shortages."
+   }
+  },
+  {
+   "node": "orchestrator",
+   "next": "planner",
+   "reason": "exposed SKUs found"
+  },
+  {
+   "node": "planner_agent",
+   "attempt": 1,
+   "output": {
+    "items": [
+     {
+      "sku_id": 728,
+      "option": "switch_S5",
+      "shortfall_days": 0.0,
+      "incremental_cost": 361.54,
+      "lost_sales_value": 0.0,
+      "rationale": "This option eliminates shortfall days and has a manageable incremental cost."
+     },
+     {
+      "sku_id": 1359,
+      "option": "switch_S5",
+      "shortfall_days": 0.0,
+      "incremental_cost": 316.84,
+      "lost_sales_value": 0.0,
+      "rationale": "This option eliminates shortfall days and has a manageable incremental cost."
+     },
+     {
+      "sku_id": 208,
+      "option": "expedite",
+      "shortfall_days": 15.6,
+      "incremental_cost": 187.2,
+      "lost_sales_value": 312.4,
+      "rationale": "This option has the lowest incremental cost while minimizing lost sales value."
+     },
+     {
+      "sku_id": 828,
+      "option": "expedite",
+      "shortfall_days": 0.2,
+      "incremental_cost": 41.91,
+      "lost_sales_value": 5.87,
+      "rationale": "This option minimizes both incremental cost and lost sales value effectively."
+     },
+     {
+      "sku_id": 977,
+      "option": "expedite",
+      "shortfall_days": 0.0,
+      "incremental_cost": 42.1,
+      "lost_sales_value": 0.0,
+      "rationale": "This option eliminates shortfall days and has the lowest incremental cost."
+     }
+    ]
+   }
+  },
+  {
+   "node": "orchestrator",
+   "next": "check",
+   "reason": "verify plan numbers"
+  },
+  {
+   "node": "check",
+   "output": {
+    "ok": true,
+    "errors": []
+   }
+  },
+  {
+   "node": "orchestrator",
+   "next": "end",
+   "reason": "auto-approved"
+  }
+ ],
+ "llm_usage": {
+  "calls": 3,
+  "in_tokens": 1723,
+  "out_tokens": 506
+ },
+ "seconds": 42.3
+}

@@ -94,4 +94,8 @@ def check_plan(plan, exposure, options):
         for f in ["shortfall_days", "incremental_cost", "lost_sales_value"]:
             if abs(getattr(it, f) - row[f]) > 0.01:
                 errs.append(f"sku {it.sku_id} {it.option}: {f} {getattr(it, f)} != tool value {row[f]}")
+        tot = lambda o: o["incremental_cost"] + o["lost_sales_value"]
+        best = min(options[it.sku_id], key=tot)
+        if tot(row) - tot(best) > 0.10 * abs(tot(best)) + 1:  # >10% above the cheapest option
+            errs.append(f"sku {it.sku_id}: {it.option} total {tot(row):.0f} vs cheapest {best['option']} total {tot(best):.0f}")
     return Verdict(ok=not errs, errors=errs)

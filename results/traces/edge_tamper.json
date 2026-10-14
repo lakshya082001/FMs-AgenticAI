@@ -13,7 +13,7 @@
     "in-transit orders past promised date: 45 (33% of in-transit; training median 29%)",
     "days since last observed alert: 60"
    ],
-   "summary": "The supplier S1 is likely disrupted due to a high probability of disruption and an alert status that exceeds the threshold. Additionally, the increased late rates and a significant percentage of in-transit orders past their promised date further indicate potential issues.",
+   "summary": "The supplier S1 is likely disrupted due to a high probability of disruption and an alert status that exceeds the threshold. Additionally, the increased late rates and a significant percentage of in-transit orders past their promised date further support this assessment.",
    "error": null
   },
   "exposure": {
@@ -133,7 +133,7 @@
      "value_at_risk": 30.4
     }
    ],
-   "summary": "The SKUs most exposed to stockouts are the Summer dresses and Titleist Pro V1x High Numbers Personalized Go, with shortfall days of 20.4 and 18.9 respectively, indicating a significant risk of running out of stock before resupply. Additionally, the Perfect Fitness Perfect Rip Deck has a high value at risk of $48,044.79, making it critical to address its shortfall of 12.8 days."
+   "summary": "The SKUs most exposed to stockouts are the Summer dresses and Titleist Pro V1x High Numbers Personalized Go, with shortfall days of 20.4 and 18.9 respectively, indicating they will run out of stock significantly before the next resupply. Additionally, the Perfect Fitness Perfect Rip Deck has a high value at risk of $48,044.79, making it critical to address its shortfall of 12.8 days."
   },
   "plan": {
    "items": [
@@ -151,7 +151,7 @@
      "shortfall_days": 3.6,
      "incremental_cost": 607.39,
      "lost_sales_value": 436.13,
-     "rationale": "This option has the lowest lost sales value among the alternatives."
+     "rationale": "This option has the lowest combined cost and lost sales value."
     },
     {
      "sku_id": 1355,
@@ -159,15 +159,15 @@
      "shortfall_days": 0.0,
      "incremental_cost": 345.59,
      "lost_sales_value": 0.0,
-     "rationale": "This option eliminates lost sales and has a reasonable incremental cost."
+     "rationale": "This option eliminates lost sales and has a low incremental cost."
     },
     {
      "sku_id": 1360,
-     "option": "switch_S2",
-     "shortfall_days": 1.3,
-     "incremental_cost": 397.49,
-     "lost_sales_value": 128.48,
-     "rationale": "This option provides a good balance between cost and minimizing lost sales."
+     "option": "expedite",
+     "shortfall_days": 2.5,
+     "incremental_cost": 182.29,
+     "lost_sales_value": 242.53,
+     "rationale": "This option minimizes both incremental cost and lost sales value."
     },
     {
      "sku_id": 823,
@@ -175,7 +175,7 @@
      "shortfall_days": 2.1,
      "incremental_cost": 357.61,
      "lost_sales_value": 83.2,
-     "rationale": "This option minimizes lost sales value while keeping incremental costs low."
+     "rationale": "This option has the lowest lost sales value and a reasonable incremental cost."
     }
    ]
   },
@@ -206,7 +206,7 @@
      "in-transit orders past promised date: 45 (33% of in-transit; training median 29%)",
      "days since last observed alert: 60"
     ],
-    "summary": "The supplier S1 is likely disrupted due to a high probability of disruption and an alert status that exceeds the threshold. Additionally, the increased late rates and a significant percentage of in-transit orders past their promised date further indicate potential issues.",
+    "summary": "The supplier S1 is likely disrupted due to a high probability of disruption and an alert status that exceeds the threshold. Additionally, the increased late rates and a significant percentage of in-transit orders past their promised date further support this assessment.",
     "error": null
    }
   },
@@ -334,7 +334,7 @@
       "value_at_risk": 30.4
      }
     ],
-    "summary": "The SKUs most exposed to stockouts are the Summer dresses and Titleist Pro V1x High Numbers Personalized Go, with shortfall days of 20.4 and 18.9 respectively, indicating a significant risk of running out of stock before resupply. Additionally, the Perfect Fitness Perfect Rip Deck has a high value at risk of $48,044.79, making it critical to address its shortfall of 12.8 days."
+    "summary": "The SKUs most exposed to stockouts are the Summer dresses and Titleist Pro V1x High Numbers Personalized Go, with shortfall days of 20.4 and 18.9 respectively, indicating they will run out of stock significantly before the next resupply. Additionally, the Perfect Fitness Perfect Rip Deck has a high value at risk of $48,044.79, making it critical to address its shortfall of 12.8 days."
    }
   },
   {
@@ -361,7 +361,7 @@
       "shortfall_days": 3.6,
       "incremental_cost": 607.39,
       "lost_sales_value": 436.13,
-      "rationale": "This option has the lowest combined cost and lost sales value."
+      "rationale": "This option has the lowest lost sales value while keeping incremental cost reasonable."
      },
      {
       "sku_id": 1355,
@@ -369,7 +369,7 @@
       "shortfall_days": 0.0,
       "incremental_cost": 345.59,
       "lost_sales_value": 0.0,
-      "rationale": "This option eliminates lost sales while keeping incremental cost low."
+      "rationale": "This option eliminates lost sales and has a low incremental cost."
      },
      {
       "sku_id": 1360,
@@ -377,7 +377,7 @@
       "shortfall_days": 1.3,
       "incremental_cost": 397.49,
       "lost_sales_value": 128.48,
-      "rationale": "This option provides a good balance of low shortfall days and costs."
+      "rationale": "This option provides a good balance of low shortfall days and manageable costs."
      },
      {
       "sku_id": 823,
@@ -385,7 +385,7 @@
       "shortfall_days": 2.1,
       "incremental_cost": 357.61,
       "lost_sales_value": 83.2,
-      "rationale": "This option minimizes both incremental cost and lost sales value."
+      "rationale": "This option minimizes both incremental cost and lost sales value effectively."
      }
     ]
    }
@@ -400,7 +400,8 @@
    "output": {
     "ok": false,
     "errors": [
-     "sku 365 switch_S5: lost_sales_value 50.0 != tool value 0.0"
+     "sku 365 switch_S5: lost_sales_value 50.0 != tool value 0.0",
+     "sku 1360: switch_S2 total 526 vs cheapest expedite total 425"
     ]
    }
   },
@@ -428,7 +429,7 @@
       "shortfall_days": 3.6,
       "incremental_cost": 607.39,
       "lost_sales_value": 436.13,
-      "rationale": "This option has the lowest lost sales value among the alternatives."
+      "rationale": "This option has the lowest combined cost and lost sales value."
      },
      {
       "sku_id": 1355,
@@ -436,15 +437,15 @@
       "shortfall_days": 0.0,
       "incremental_cost": 345.59,
       "lost_sales_value": 0.0,
-      "rationale": "This option eliminates lost sales and has a reasonable incremental cost."
+      "rationale": "This option eliminates lost sales and has a low incremental cost."
      },
      {
       "sku_id": 1360,
-      "option": "switch_S2",
-      "shortfall_days": 1.3,
-      "incremental_cost": 397.49,
-      "lost_sales_value": 128.48,
-      "rationale": "This option provides a good balance between cost and minimizing lost sales."
+      "option": "expedite",
+      "shortfall_days": 2.5,
+      "incremental_cost": 182.29,
+      "lost_sales_value": 242.53,
+      "rationale": "This option minimizes both incremental cost and lost sales value."
      },
      {
       "sku_id": 823,
@@ -452,7 +453,7 @@
       "shortfall_days": 2.1,
       "incremental_cost": 357.61,
       "lost_sales_value": 83.2,
-      "rationale": "This option minimizes lost sales value while keeping incremental costs low."
+      "rationale": "This option has the lowest lost sales value and a reasonable incremental cost."
      }
     ]
    }
@@ -477,8 +478,8 @@
  ],
  "llm_usage": {
   "calls": 4,
-  "in_tokens": 2991,
-  "out_tokens": 900
+  "in_tokens": 3010,
+  "out_tokens": 906
  },
- "seconds": 46.6
+ "seconds": 42.2
 }
