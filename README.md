@@ -1,6 +1,7 @@
 # Supplier disruption detection + replenishment agents
 
 Write-up: [write-up/writeup.pdf](write-up/writeup.pdf) · Results, schema, assumptions: [DETAILS.md](DETAILS.md) · Data: [DATA.md](DATA.md)
+Video - https://drive.google.com/drive/u/0/folders/1s0cxWiy7UvULK6bRvoVXYyRH0x8RWdL2 
 
 ## Problem statement
 Detect supplier disruptions early from operational data, then recommend replenishment actions (wait / expedite / switch supplier) before stock-outs, with a human sign-off on risky plans.
