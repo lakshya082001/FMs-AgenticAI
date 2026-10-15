@@ -1,11 +1,17 @@
-# Supplier disruption detection + replenishment agents (Track A, Scenario S1)
+# Supplier disruption detection + replenishment agents
 
-**Problem:** detect supplier disruptions early, then recommend replenishment actions.
-**Track A (multi-agent), Scenario S1 (supply chain risk).** TabPFN scores supplier-day disruption risk; LLM agents explain, find exposed SKUs and plan actions; a human approves risky plans.
+Write-up: [write-up/writeup.pdf](write-up/writeup.pdf) · Results, schema, assumptions: [DETAILS.md](DETAILS.md) · Data: [DATA.md](DATA.md)
 
-Data: DataCo (real) + simulated supplier disruptions, see [DATA.md](DATA.md). Results, traces, schema, assumptions, limitations: see [DETAILS.md](DETAILS.md).
+## Problem statement
+Detect supplier disruptions early from operational data, then recommend replenishment actions (wait / expedite / switch supplier) before stock-outs, with a human sign-off on risky plans.
 
-## Pipeline
+## Domain and track
+**Scenario S1 (Supply Chain Risk & Optimization), Track A (Agentic / Multi-Agent AI).**
+
+## Data source
+DataCo Smart Supply Chain (Mendeley Data, DOI 10.17632/8gx2fvg2k6, CC BY 4.0): real orders and shipping times. It has no supplier or inventory data and no temporal dynamics, so a supplier/inventory layer and disruption episodes are **simulated** (seeded scripts, assumptions in DATA.md).
+
+## Flow
 ```
 supplier-day row -> Orchestrator (deterministic router, logs every decision)
    -> Risk Analyst      validate row, TabPFN inference (pickle), evidence + hedged summary   [1 LLM call]
@@ -16,18 +22,20 @@ supplier-day row -> Orchestrator (deterministic router, logs every decision)
         fail -> Planner retries once -> still failing: human
    -> human gate        interrupt if p is borderline, cost > 10,000, or check failed
 ```
-LLMs never compute numbers; comparisons (alert status, hedge word) are done in code because the LLM got them wrong in testing (e.g. "0.27 is below 0.25").
-Why agents rather than one prompt: separate tools and typed outputs per role, and an independent check between generation and action.
+LLMs never compute numbers; comparisons (alert status, hedge word) are done in code.
 
-## Reproduce
-Python 3.13. Needs `../.env` (outside the repo) with `tabpfn_key`, `OPENAI_BASE_URL`, `OPENAI_API_KEY`, `MODEL` (OpenAI-compatible gateway). First TabPFN run downloads ~1.5 GB of weights (license acceptance on the Prior Labs account required).
+## Setup
+Python 3.13.5. Needs `../.env` (outside the repo) with `tabpfn_key`, `OPENAI_BASE_URL`, `OPENAI_API_KEY`, `MODEL` (OpenAI-compatible gateway). The first TabPFN run downloads ~1.5 GB of weights (license acceptance on the Prior Labs account required).
 ```
 python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
-# put DataCoSupplyChainDataset.csv at data/raw/dataco.csv (Mendeley 8gx2fvg2k6, latin-1)
-python src/gen_inventory.py      # suppliers.csv, sku.csv
-python src/disrupt.py            # episodes.csv, train/val/test.csv
-.venv/bin/python src/score.py    # fits TabPFN, writes results/tabpfn.pkl (~850 MB, git-ignored), risk_scores.csv
-.venv/bin/python src/run.py --supplier S2 --date 2017-02-16 --name success   # prompts for approval unless --decision approve|reject
 ```
-`TAMPER=1` injects a wrong number into the first plan (fault injection); `--drop r7,r90` blanks features (validation edge case).
+Download `DataCoSupplyChainDataset.csv` (Mendeley 8gx2fvg2k6, latin-1) to `data/raw/dataco.csv`.
 
+## Reproduce end to end
+```
+python src/gen_inventory.py      # data/suppliers.csv, data/sku.csv
+python src/disrupt.py            # data/episodes.csv, data/train|val|test.csv
+python src/score.py              # fits TabPFN, prints metrics, writes results/risk_scores.csv, results/tabpfn.pkl (~850 MB, git-ignored)
+python src/run.py --supplier S2 --date 2017-02-16 --name success --decision approve   # writes results/traces/success.json
+```
+The exact command behind every committed trace is listed in DETAILS.md.

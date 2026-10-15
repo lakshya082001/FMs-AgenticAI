@@ -46,3 +46,16 @@ Expected extra delay when disrupted 3.5 d; reorder = demand x (lead + 14 d cycle
 - The plan check validates numbers and cost-optimality, not whether the LLM's rationale is sound.
 - Single-row inference (~30 s on CPU) is too slow for per-event serving; production would batch-score daily on GPU and cache.
 - The TabPFN weights used (v3.5) carry a non-commercial license; production use needs a commercial license.
+
+## Commands behind each trace
+Run from the repo root after `score.py` (LLM output may vary slightly between runs).
+```
+python src/run.py --supplier S2 --date 2017-02-16 --name success --decision approve
+python src/run.py --supplier S6 --date 2017-07-10 --name success_human --decision approve
+python src/run.py --supplier S1 --date 2017-03-02 --name safe
+TAMPER=1 python src/run.py --supplier S1 --date 2017-07-12 --name edge_tamper --decision approve
+python src/run.py --supplier S1 --date 2017-01-24 --name edge_borderline --decision reject
+python src/run.py --supplier S1 --date 2017-07-10 --name edge_check_escalation --decision approve
+python src/run.py --supplier S7 --date 2017-01-01 --name edge_false_alarm --decision approve
+python src/run.py --supplier S1 --date 2017-07-10 --name edge_invalid --drop r7,r90,dev7
+```

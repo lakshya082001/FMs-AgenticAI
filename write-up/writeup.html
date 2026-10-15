@@ -1,0 +1,72 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>
+@page { size: Letter; margin: 0.5in 0.55in; }
+body { font-family: Helvetica, Arial, sans-serif; font-size: 11pt; line-height: 1.22; color: #111; margin: 0; }
+h1 { font-size: 14pt; margin: 0 0 1pt 0; }
+h2 { font-size: 11.5pt; margin: 6pt 0 2pt 0; border-bottom: 1px solid #888; }
+p { margin: 5pt 0 3pt 0; }
+ul { margin: 1pt 0 1pt 14pt; padding: 0; }
+li { margin: 0 0 1.5pt 0; }
+table { border-collapse: collapse; width: 100%; font-size: 11pt; margin: 5pt 0 3pt 0; }
+td, th { border: 1px solid #999; padding: 0.5pt 3pt; text-align: left; vertical-align: top; }
+th { background: #eee; }
+.flow { display: flex; align-items: stretch; gap: 3pt; margin: 2pt 0; font-size: 11pt; }
+.box { border: 1px solid #333; border-radius: 3pt; padding: 1pt 3pt; flex: 1; text-align: center; line-height: 1.1; }
+.arrow { align-self: center; }
+.note { margin: 0; }
+a { color: #0645ad; text-decoration: none; }
+</style></head><body>
+
+<h1>Supplier disruption detection and replenishment agents</h1>
+<p><b>Lakshya Sharma · Track A (Agentic / Multi-Agent AI) · Scenario S1 (Supply Chain Risk)</b> · github.com/lakshya082001/FMs-AgenticAI</p>
+
+<h2>1. Problem &amp; Domain</h2>
+<p><b>Problem:</b> detect supplier disruptions early from operational data, then recommend replenishment actions (wait, expedite, switch supplier) before stock-outs, with a human sign-off on risky plans.
+<b>Why Track A:</b> B has no language task needing weight adaptation; C would end at a risk score, but the value is the action and its review; D has no document corpus (structured data). Why agentic rather than one LLM or a classifier alone: the task needs tools, an independent check between generation and action, and a human gate, which a single prompt or a bare probability cannot give.</p>
+<div class="flow">
+ <div class="box">Supplier-day features</div><div class="arrow">→</div>
+ <div class="box"><b>Orchestrator</b> (code router)</div><div class="arrow">→</div>
+ <div class="box"><b>Risk Analyst</b> TabPFN + evidence</div><div class="arrow">→</div>
+ <div class="box">p &lt; thr: end, “not at risk”</div>
+</div>
+<div class="flow">
+ <div class="box">p ≥ thr: <b>Exposure Analyst</b></div><div class="arrow">→</div>
+ <div class="box"><b>Planner</b> wait / expedite / switch</div><div class="arrow">→</div>
+ <div class="box"><b>Check</b> (code) retry once</div><div class="arrow">→</div>
+ <div class="box"><b>Human gate</b></div><div class="arrow">→</div>
+ <div class="box">Action card</div>
+</div>
+<p class="note">Every node returns to the orchestrator, which logs its decision and reason. Gate fires on borderline p, cost over 10,000, or a failed check.</p>
+
+<h2>2. Approach &amp; Algorithm Decisions (choice → alternative rejected)</h2>
+<ul>
+<li><b>Why a model at all, not agents alone?</b> Spotting a disruption needs relations between many features (late rates, in-transit delays, volume), which an LLM cannot compute reliably. Those relations can be built as a graph (see <a href="https://medium.com/neo4j/designing-an-agentic-ai-system-for-supply-chain-optimization-with-graph-databases-2ebb62412e31">this Neo4j agentic design</a>; I could not open the full article, so I rely on its description of agents querying a graph database) or learned by a model. A graph needs more exhaustive relational data and build time, so we use a structured-data foundation model: <b>TabPFN</b> gives probabilistic predictions on small datasets with no hyperparameter tuning (“fit” just stores the context), and one agent holds that prediction. <i>Rejected:</i> graph DB (data and time); XGBoost (a fair baseline I did <b>not</b> run, so I claim no win over it); sequence models such as LSTM/Chronos (3.6K rows, short episodes, trailing-window features already summarise history).</li>
+<li><b>Closest prior work</b> <a href="https://arxiv.org/html/2601.09680v1">arXiv 2601.09680</a>: 7 CrewAI/GPT-4o agents, news-triggered, Neo4j multi-tier graph, rule-weighted risk score, 30 expert scenarios (F1 0.90–0.99), no confidence scores and no separate verification step described. <i>We differ:</i> structured-data trigger, calibrated probability, deterministic verification with retry, an executable human gate, traced failure cases. They are stronger on multi-tier graph reasoning and expert-labelled evaluation.</li>
+<li><b>Data: real DataCo orders + simulated disruptions.</b> The raw late flag has no temporal signal (lane-level weekly autocorrelation −0.02 to −0.06), so detection on raw labels would be vacuous. <i>Rejected:</i> fully synthetic data with planted rules (circular). We overlay seeded disruption episodes (delay days, not just flipped labels) on real order flow; severity was never tuned for results.</li>
+<li><b>Features:</b> trailing 3–90 day late rates, deviations, and the share of in-transit orders past their promised date (observable before delivery completes). <i>Rejected:</i> completed-delivery rates alone (they lag the true state by shipping time; first attempt AUC 0.62 val / 0.66 test).</li>
+<li><b>Orchestration: LangGraph</b> (explicit state, conditional edges, retry loop, native interrupt for the human gate). <i>Rejected:</i> CrewAI / AutoGen, as sequential or chat-style flows fit a retry-and-gate loop less cleanly (my judgement, not benchmarked).</li>
+<li><b>Decomposition:</b> 3 LLM agents + a code orchestrator + a code check, mapped to detect → exposure → action. <i>Rejected:</i> one LLM with tools (no independent verification, single failure point); an LLM critic (a deterministic number check is cheaper and cannot hallucinate); merging Exposure into Planner (hides an inspectable intermediate result).</li>
+<li><b>Planner:</b> LLM picks among tool-computed options (it never computes numbers). <i>Rejected:</i> pure argmin/OR-Tools, which would be optimal, but the LLM adds rationale; the check bounds it to within 10% of the cheapest option.</li>
+<li><b>Silent failures found and handled:</b> the LLM stated “0.27 is below 0.25” (alert status and hedge word now computed in code); it missed the cheapest option on 3 of 15 early decisions (2 distinct SKUs, one ~15K worse) (optimality check + retry); injected wrong numbers are caught by the number check; failures escalate to a human.</li>
+</ul>
+
+<h2>3. Results &amp; Error Analysis</h2>
+<p><b>Target:</b> supplier is inside a disruption episode that day. <b>11 features:</b> late rate over 3/7/14/30/90 days, 7-day volume, two deviations, days since last alert, in-transit overdue count and share. 8 suppliers; train 3,656 rows (Apr 2015–Jun 2016), val 1,472, test 2,184 (Jan–Sep 2017), temporal split.</p>
+<table>
+<tr><th>Component</th><th>One-liner</th></tr>
+<tr><td>Risk Analyst (LLM + TabPFN)</td><td>Validates the row, runs the pickled TabPFN, writes a hedged evidence summary.</td></tr>
+<tr><td>Exposure Analyst (LLM)</td><td>Finds the supplier's SKUs whose days of cover fall short of disruption-adjusted lead time.</td></tr>
+<tr><td>Planner (LLM)</td><td>Picks wait, expedite or switch per SKU from a tool-computed cost table.</td></tr>
+<tr><td>Orchestrator, Check (code)</td><td>Route and log every step; verify numbers and cost-optimality, retry once, escalate.</td></tr>
+</table>
+<table>
+<tr><th></th><th>AUC</th><th>Avg prec.</th><th>Brier</th><th>ECE</th><th>Base rate</th><th>Best single feature (od_share) AUC</th></tr>
+<tr><td>Val</td><td>0.659</td><td>0.298</td><td>0.121</td><td>0.071</td><td>0.145</td><td>0.689</td></tr>
+<tr><td>Test</td><td>0.652</td><td>0.402</td><td>0.172</td><td>0.091</td><td>0.234</td><td>0.664</td></tr>
+</table>
+<p>At threshold 0.25 (best F1 on val), 27 of 35 test episodes are detected, median delay 5 days, false-alarm rate 17.4%. <b>TabPFN does not beat the one-feature baseline</b>; gains came from the in-transit overdue signal, not the model. Single seed and 35 episodes: ~0.01 AUC differences are noise. Eight committed traces cover success, borderline, retry after a failed check, false alarm, invalid input and fault injection; a run takes 40–46 s (about 30 s is single-row TabPFN inference on CPU), 1–4 LLM calls, ~2–3.9K tokens. Latency is measured per run only and dollar cost is not computed.</p>
+<p><b>Where it fails:</b> long-range temporal dependence (windows stop at 90 days; episodes are memoryless, so seasonality and recurring supplier fragility are untested); train-to-test shift (15% → 23% disrupted) hurts calibration; detection lags episode start by ~5 days because deliveries complete late; false alarms trigger real plans (a supplier at p=0.71 that was not disrupted still got a plan); alternates are assumed undisrupted and exposure is single-tier.</p>
+
+<h2>4. Production &amp; Limitations</h2>
+<p><b>Production:</b> export the fitted TabPFN weights and serve them (or the hosted API) with batch daily scoring on a GPU and cached scores, since single-row CPU inference takes ~30 s; run the agent graph as a service with a persistent LangGraph checkpointer so human approvals survive restarts; monitor alert rate, feature drift and calibration once labels mature. If multi-tier reasoning is needed, add a graph DB (e.g. Neo4j) holding the supplier network. <b>Next:</b> a what-if agent that sweeps features to show what would flip an alert, and per-node latency/cost tracing. <b>Limitations:</b> disruptions are simulated, so results measure detection of simulated events, not real-world accuracy; TabPFN weights used (v3.5) carry a non-commercial license.</p>
+</body></html>
